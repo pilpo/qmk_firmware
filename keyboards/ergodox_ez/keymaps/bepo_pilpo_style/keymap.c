@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "action_layer.h"
 #include "version.h"
+#include "action_tapping.h"
 
 #define BASE 0 // default layer
 #define SYMB 1 // symbols
@@ -18,8 +19,12 @@ enum custom_keycodes {
   EPRM,
   VRSN,
   RGB_SLD,
-  M_C_CEDILLE
+  M_C_CEDILLE,
+  CPY
 };
+
+#define KEY_DELAY 200
+static uint16_t key_timer_cpy;
 
 bool is_mac = false; // Default to windows operation for extended character code sequences
 
@@ -36,6 +41,15 @@ char *alt_codes[][2] = {
     }, {
         SS_LALT(SS_TAP(X_KP_0)SS_TAP(X_KP_1)SS_TAP(X_KP_4)SS_TAP(X_KP_8)), // ALT+0148
         SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET))) // OPT+{
+    }}; 
+
+char *combo_codes[][2] = {
+    {
+        SS_LCTRL(SS_TAP(X_C)), // ALT+128
+        SS_LALT(SS_TAP(X_RBRACKET)) // OPT+]
+    }, {
+        SS_LCTRL(SS_TAP(X_V)), // ALT+0146
+        SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET))) // OPT+}
     }}; 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -67,7 +81,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_EQL,         KC_1,         KC_2,   KC_3,   KC_4,   KC_5,   KC_LEFT,
         KC_DELT,        KC_Q,         KC_W,   KC_E,   KC_R,   KC_T,   TG(SYMB),
         KC_BSPC,        KC_A,         KC_S,   KC_D,   KC_F,   KC_G,
-        M(0),        CTL_T(KC_Z),  KC_X,   M_C_CEDILLE,   KC_V,   KC_B,   ALL_T(KC_NO),
+        M(0),        CTL_T(KC_Z),  KC_X,   M_C_CEDILLE,   M(2),   CPY,   ALL_T(KC_NO),
         LT(SYMB,KC_GRV),KC_QUOT,      LALT(KC_LSFT),  KC_LEFT,KC_RGHT,
                                               ALT_T(KC_APP),  KC_LGUI,
                                                               KC_HOME,
@@ -191,7 +205,64 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
         } else {
             unregister_code(KC_DOT);
         }
-        break;    
+        break; 
+    case 2:
+          if (record->event.pressed) {
+            if (record->tap.count) {
+              if (record->tap.interrupted) {
+                record->tap.count = 0;
+                // hold press action
+                return MACRO(D(LCTRL), T(C));
+              } else {
+                // tap press action
+                register_code(KC_C);
+              }
+            } else {
+              // hold press action
+              return MACRO(D(LCTRL), T(C));
+
+            }
+          } else {
+            if (record->tap.count) {
+              // tap release action
+              unregister_code(KC_C);
+            } else {
+              // hold release action
+              unregister_code(KC_LCTRL);
+              unregister_code(KC_C);
+            }
+            record->tap.count = 0;
+          }
+          break;
+    case 3:
+          if (record->event.pressed) {
+            if (record->tap.count) {
+              if (record->tap.interrupted) {
+                record->tap.count = 0;
+                // hold press action
+                return MACRO(D(LCTRL), T(V));
+
+              } else {
+                // tap press action
+                register_code(KC_V);
+              }
+            } else {
+              // hold press action
+              return MACRO(D(LCTRL), T(V));
+
+            }
+          } else {
+            if (record->tap.count) {
+              // tap release action
+              unregister_code(KC_V);
+            } else {
+              // hold release action
+              unregister_code(KC_LCTRL);
+              unregister_code(KC_V);
+            }
+            record->tap.count = 0;
+          }
+          break;
   }
   return MACRO_NONE;
 };
@@ -202,6 +273,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         uint16_t index = keycode - M_C_CEDILLE;
         send_string(alt_codes[index][is_mac]);
+      }
+      return false;
+      break;
+    case CPY:
+      if (record->event.pressed) {
+        key_timer_cpy = timer_read(); // if the key is being pressed, we start the timer.
+      } else {
+        if (timer_elapsed(key_timer_cpy) < KEY_DELAY) { // when the key is being released, we check the timer
+          send_string(SS_TAP(X_C)); // if the key is released before KEY_DELAY then we send c
+        }else{ // if the key is released after KEY_DELAY then we send CTRL+c
+          send_string(combo_codes[0][is_mac]);
+        }
       }
       return false;
       break;
