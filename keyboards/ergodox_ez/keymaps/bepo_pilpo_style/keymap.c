@@ -253,7 +253,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
  * | TAB    |   B  |   É  |   P  |   O  |   È  | HOME |           |  V   |   D  |   L  |   J  |   W  |   Ç  | BCKSPC |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | TL1    |   A  |   U  |   I  |   E  |   ,  |------|           |------|   T  |   S  |   R  |   N  |   Q  |  ENTER |
+ * | TL1    |   A  |   U  |   I  |   E  |   ,  |------|           |------|   T  |   S  |   R  |   N  |   Q  | ENTER  |
  * |--------+------+------+------+------+------| END  |           |  C   |------+------+------+------+------+--------|
  * | LShift |   Ê  |   À  |   Y  |   X  |   .  |      |           |      |   '  |   M  |   G  |   H  |   F  | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
@@ -273,9 +273,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // left hand
 KC_ESCAPE,        M_DOUBLE_QUOTE,         M_CHEVRON_INF,    M_CHEVRON_SUP,    M_PARENTHESE_OUV,   M_PARENTHESE_FERM,    M_TIRET_BAS,
 KC_TAB,           KC_B,                   M_E_AIGUE,        KC_P,             KC_O,               M_E_GRAVE,            KC_HOME,
-MO(LAYER_2),      KC_A,                   KC_U,             KC_I,             KC_E,               M_VIRGULE,
+MO(LAYER_2),      KC_Q,                   KC_U,             KC_I,             KC_E,               M_VIRGULE,
 M(SHIFTED),       M_E_CIRCONFLEXE,        M_A_GRAVE,        KC_Y,             KC_X,               M_POINT,              KC_END,
-KC_LCTRL,         KC_Z,                   KC_LALT,          KC_K,             M_PT_EXCLAM,
+KC_LCTRL,         KC_W,                   KC_LALT,          KC_K,             M_PT_EXCLAM,
 
                                                                                                                         KC_F4,  KC_F5,
                                                                                                                                 KC_F6,
@@ -283,9 +283,9 @@ KC_LCTRL,         KC_Z,                   KC_LALT,          KC_K,             M_
 
 // right hand
 M_PRCT,           M_AROBASE,              M_PLUS,           M_MOINS,          M_FOIS,             M_EGAL,               TG(LAYER_2),
-KC_V,             KC_D,                   KC_L,             KC_J,             KC_W,               M_C_CEDILLE,          KC_BSPACE,
-                  KC_T,                   KC_S,             KC_R,             KC_N,               KC_Q,                 KC_ENT,                 
-KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,              KC_H,               KC_F,                M(SHIFTED),
+KC_V,             KC_D,                   KC_L,             KC_J,             KC_Z,               M_C_CEDILLE,          KC_BSPACE,
+                  KC_T,                   KC_S,             KC_R,             KC_N,               KC_A,                 KC_ENT,                 
+KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,              KC_H,              KC_F,                M(SHIFTED),
                                           KC_LEFT,          KC_UP,            KC_DOWN,            KC_RIGHT,             KC_RCTRL,       
 
                                                                                                                         KC_RGUI, KC_DEL,
@@ -469,6 +469,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         || keycode == M_E_AIGUE_MAJ
         || keycode == M_E_GRAVE_MAJ
         || keycode == M_E_CIRCONFLEXE_MAJ
+        || keycode == M_M_MAJ
       ){
         unregister_code(KC_LSFT);
       }
