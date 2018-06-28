@@ -251,7 +251,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * | Esc    |   "  |   <  |   >  |   (  |   )  | _    |           | %    |   @  |   +  |   -  |   *  |   =  |  TL1   |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | TAB    |   B  |   É  |   P  |   O  |   È  | HOME |           |  V   |   D  |   L  |   J  |   W  |   Ç  |  DEL   |
+ * | TAB    |   B  |   É  |   P  |   O  |   È  | HOME |           |  V   |   D  |   L  |   J  |   W  |   Ç  | BCKSPC |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * | TL1    |   A  |   U  |   I  |   E  |   ,  |------|           |------|   T  |   S  |   R  |   N  |   Q  |  ENTER |
  * |--------+------+------+------+------+------| END  |           |  C   |------+------+------+------+------+--------|
@@ -283,7 +283,7 @@ KC_LCTRL,         KC_Z,                   KC_LALT,          KC_K,             M_
 
 // right hand
 M_PRCT,           M_AROBASE,              M_PLUS,           M_MOINS,          M_FOIS,             M_EGAL,               TG(LAYER_2),
-KC_V,             KC_D,                   KC_L,             KC_J,             KC_W,               M_C_CEDILLE,          KC_DEL,
+KC_V,             KC_D,                   KC_L,             KC_J,             KC_W,               M_C_CEDILLE,          KC_BSPACE,
                   KC_T,                   KC_S,             KC_R,             KC_N,               KC_Q,                 KC_ENT,                 
 KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,              KC_H,               KC_F,                M(SHIFTED),
                                           KC_LEFT,          KC_UP,            KC_DOWN,            KC_RIGHT,             KC_RCTRL,       
