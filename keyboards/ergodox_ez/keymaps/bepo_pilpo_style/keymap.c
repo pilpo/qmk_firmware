@@ -5,14 +5,8 @@
 #include "action_tapping.h"
 
 #define BASE 0 // default layer
-#define SYMB 1 // symbols
-#define MDIA 2 // media keys
-
-#define UNDO LCTL(KC_Z)
-#define REDO LCTL(KC_Y)
-#define CUT LCTL(KC_X)
-#define COPY LCTL(KC_C)
-#define PASTE LCTL(KC_V)
+#define SHIFT 1 // shift layer 
+#define LAYER_2 2 // "first" true layer 
 
 enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
@@ -20,105 +14,156 @@ enum custom_keycodes {
   VRSN,
   RGB_SLD,
   M_C_CEDILLE,
+  M_DOUBLE_QUOTE,
+  M_CHEVRON_INF,
+  M_CHEVRON_SUP,
+  M_PARENTHESE_OUV,
+  M_PARENTHESE_FERM,
+  M_TIRET_BAS,
+  M_PRCT,
+  M_AROBASE,
+  M_PLUS,
+  M_MOINS,
+  M_FOIS,
+  M_EGAL,
   CPY
 };
 
 #define KEY_DELAY 200
 static uint16_t key_timer_cpy;
 
-bool is_mac = false; // Default to windows operation for extended character code sequences
-
+bool is_mac = false;  // Default to windows operation for extended character code sequences 
+                      // for future, use this on linux with unicode
+                      // for example see https://askubuntu.com/questions/88347/how-can-i-type-ascii-characters-like-alt-numpad-in-windows
+                      // Alt + 255 on Windows creates a non-breaking space (ASCII 255)
+                      // This character in Unicode is U+00A0
+                      // On Ubuntu, type it as Ctrl + Shift + U then 00A0
 char *alt_codes[][2] = {
     {
-        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_2)SS_TAP(X_KP_8)), // ALT+128
-        SS_LALT(SS_TAP(X_RBRACKET)) // OPT+]
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_2)SS_TAP(X_KP_8)),                // ALT+128 Ç
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
     }, {
-        SS_LALT(SS_TAP(X_KP_0)SS_TAP(X_KP_1)SS_TAP(X_KP_4)SS_TAP(X_KP_6)), // ALT+0146
-        SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET))) // OPT+}
+        SS_LALT(SS_TAP(X_KP_3)SS_TAP(X_KP_4)),                              // ALT+34 "
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
     }, {
-        SS_LALT(SS_TAP(X_KP_0)SS_TAP(X_KP_1)SS_TAP(X_KP_4)SS_TAP(X_KP_7)), // ALT+0147
-        SS_LALT(SS_TAP(X_LBRACKET)) // OPT+[
+        SS_LALT(SS_TAP(X_KP_6)SS_TAP(X_KP_0)),                              // ALT+60 <
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
     }, {
-        SS_LALT(SS_TAP(X_KP_0)SS_TAP(X_KP_1)SS_TAP(X_KP_4)SS_TAP(X_KP_8)), // ALT+0148
-        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET))) // OPT+{
+        SS_LALT(SS_TAP(X_KP_6)SS_TAP(X_KP_2)),                              // ALT+62 >
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_4)SS_TAP(X_KP_0)),                              // ALT+40 (
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_4)SS_TAP(X_KP_1)),                              // ALT+41 )
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_9)SS_TAP(X_KP_5)),                              // ALT+95 _
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_3)SS_TAP(X_KP_7)),                              // ALT+37 %
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_6)SS_TAP(X_KP_4)),                              // ALT+64 @
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_4)SS_TAP(X_KP_3)),                              // ALT+43 + 
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_4)SS_TAP(X_KP_5)),                              // ALT+45 -
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_4)SS_TAP(X_KP_2)),                              // ALT+42 * 
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_4)SS_TAP(X_KP_7)),                              // ALT+47 /
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_6)SS_TAP(X_KP_1)),                              // ALT+61 =
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
     }}; 
 
 char *combo_codes[][2] = {
     {
-        SS_LCTRL(SS_TAP(X_C)), // ALT+128
-        SS_LALT(SS_TAP(X_RBRACKET)) // OPT+]
+        SS_LCTRL(SS_TAP(X_C)),                  // COPY
+        SS_LALT(SS_TAP(X_RBRACKET))             // mac shortcut for later
     }, {
-        SS_LCTRL(SS_TAP(X_V)), // ALT+0146
-        SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET))) // OPT+}
+        SS_LCTRL(SS_TAP(X_V)),                  // PAST
+        SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
+    }, {
+        SS_LCTRL(SS_TAP(X_X)),                  // CUT
+        SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
     }}; 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Keymap 0: Basic layer
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |   =    |   1  |   2  |   3  |   4  |   5  | LEFT |           | RIGHT|   6  |   7  |   8  |   9  |   0  |   -    |
+ * | Esc    |   "  |   <  |   >  |   (  |   )  | _    |           | %    |   @  |   +  |   -  |   *  |   =  |  TL1   |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | Del    |   Q  |   W  |   E  |   R  |   T  |  L1  |           |  L1  |   Y  |   U  |   I  |   O  |   P  |   \    |
+ * | TAB    |   B  |   É  |   P  |   O  |   È  | HOME |           |  V   |   D  |   L  |   J  |   W  |   Ç  |  DEL   |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | BkSp   |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |; / L2|' / Cmd |
- * |--------+------+------+------+------+------| Hyper|           | Meh  |------+------+------+------+------+--------|
- * | LShift |Z/Ctrl|   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |//Ctrl| RShift |
+ * | TL1    |   A  |   U  |   I  |   E  |   ,  |------|           |------|   T  |   S  |   R  |   N  |   Q  |  ENTER |
+ * |--------+------+------+------+------+------| END  |           |  C   |------+------+------+------+------+--------|
+ * | LShift |   Ê  |   À  |   Y  |   X  |   .  |      |           |      |   '  |   M  |   G  |   H  |   F  | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |Grv/L1|  '"  |AltShf| Left | Right|                                       |  Up  | Down |   [  |   ]  | ~L1  |
+ *   |Ctrl  |   Z  | Alt  |   K  |   !  |                                       |   ←  |   ↑  |   ↓  |   →  |  F4  |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
- *                                        | App  | LGui |       | Alt  |Ctrl/Esc|
+ *                                        | F5   | F6   |       | WIN  | DEL  |
  *                                 ,------|------|------|       |------+--------+------.
- *                                 |      |      | Home |       | PgUp |        |      |
- *                                 | Space|Backsp|------|       |------|  Tab   |Enter |
- *                                 |      |ace   | End  |       | PgDn |        |      |
+ *                                 |      |      | F7   |       | PgUp |        |      |
+ *                                 | SPACE|ALTTAB|------|       |------|  FN      |SPACE |
+ *                                 |      |      | F8   |       | PgDn |        |      |
  *                                 `--------------------'       `----------------------'
  */
+
 // If it accepts an argument (i.e, is a function), it doesn't need KC_.
 // Otherwise, it needs KC_*
 [BASE] = LAYOUT_ergodox(  // layer 0 : default
-        // left hand
-        KC_EQL,         KC_1,         KC_2,   KC_3,   KC_4,   KC_5,   KC_LEFT,
-        KC_DELT,        KC_Q,         KC_W,   KC_E,   KC_R,   KC_T,   TG(SYMB),
-        KC_BSPC,        KC_A,         KC_S,   KC_D,   KC_F,   KC_G,
-        M(0),        CTL_T(KC_Z),  KC_X,   M_C_CEDILLE,   M(2),   CPY,   ALL_T(KC_NO),
-        LT(SYMB,KC_GRV),KC_QUOT,      LALT(KC_LSFT),  KC_LEFT,KC_RGHT,
-                                              ALT_T(KC_APP),  KC_LGUI,
-                                                              KC_HOME,
-                                               KC_SPC,KC_BSPC,KC_END,
-        // right hand
-             KC_RGHT,     KC_6,   KC_7,  KC_8,   KC_9,   KC_0,             KC_MINS,
-             TG(SYMB),    KC_Y,   KC_U,  KC_I,   KC_O,   KC_P,             KC_BSLS,
-                          KC_H,   KC_J,  KC_K,   KC_L,   LT(MDIA, KC_SCLN),GUI_T(KC_QUOT),
-             MEH_T(KC_NO),KC_N,   KC_M,  KC_COMM,KC_DOT, CTL_T(KC_SLSH),   KC_RSFT,
-                                  KC_UP, KC_DOWN,KC_LBRC,KC_RBRC,          KC_FN1,
-             KC_LALT,        CTL_T(KC_ESC),
-             KC_PGUP,
-             KC_PGDN,KC_TAB, KC_ENT
+// left hand
+KC_ESCAPE,      M_DOUBLE_QUOTE,         M_CHEVRON_INF,   M_CHEVRON_SUP,   M_PARENTHESE_OUV,   M_PARENTHESE_FERM,   M_TIRET_BAS,
+KC_DELT,        KC_Q,         KC_W,   KC_E,   KC_R,   KC_T,   TG(SHIFT),
+KC_BSPC,        KC_A,         KC_S,   KC_D,   KC_F,   KC_G,
+M(0),        CTL_T(KC_Z),  KC_X,   M_C_CEDILLE,   M(2),   CPY,   ALL_T(KC_NO),
+LT(SHIFT,KC_GRV),KC_QUOT,      LALT(KC_LSFT),  KC_LEFT,KC_RGHT,
+                                      ALT_T(KC_APP),  KC_LGUI,
+                                                      KC_HOME,
+                                       KC_SPC,KC_BSPC,KC_END,
+
+// right hand
+M_PRCT,     M_AROBASE,   M_PLUS,  M_MOINS,   M_FOIS,   M_EGAL,             KC_MINS,
+TG(SHIFT),    KC_Y,   KC_U,  KC_I,   KC_O,   KC_P,             KC_BSLS,
+KC_H,   KC_J,  KC_K,   KC_L,   LT(LAYER_2, KC_SCLN),GUI_T(KC_QUOT),
+MEH_T(KC_NO),KC_N,   KC_M,  KC_COMM,KC_DOT, CTL_T(KC_SLSH),   KC_RSFT,
+KC_UP, KC_DOWN,KC_LBRC,KC_RBRC,          KC_FN1,
+KC_LALT,        CTL_T(KC_ESC),
+KC_PGUP,
+KC_PGDN,KC_TAB, KC_ENT
     ),
-/* Keymap 1: Symbol Layer
+/* Keymap 1: Shift Layer
  *
  * ,---------------------------------------------------.           ,--------------------------------------------------.
- * |Version  |  F1  |  F2  |  F3  |  F4  |  F5  |      |           |      |  F6  |  F7  |  F8  |  F9  |  F10 |   F11  |
+ * |         |  1   |  2   |  3   |  4   |  5   |  #   |           |  $   | 6    |  7   | 8    | 9    | 0    |        |
  * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
- * |         |   !  |   @  |   {  |   }  |   |  |      |           |      |   Up |   7  |   8  |   9  |   *  |   F12  |
+ * |         |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |   #  |   $  |   (  |   )  |   `  |------|           |------| Down |   4  |   5  |   6  |   +  |        |
+ * |         |      |      |      |      | ;    |------|           |------|      |      |      |      |      |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |   %  |   ^  |   [  |   ]  |   ~  |      |           |      |   &  |   1  |   2  |   3  |   \  |        |
+ * |         |      |      |      |      | :    |      |           |      | ?    |      |      |      |      |        |
  * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   | EPRM  |      |      |      |      |                                       |      |    . |   0  |   =  |      |
+ *   |       |      |      |      | ^    |                                       |      |      |      |      |      |
  *   `-----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
- *                                        |Animat|      |       |Toggle|Solid |
+ *                                        |      |      |       |      |       |
  *                                 ,------|------|------|       |------+------+------.
- *                                 |Bright|Bright|      |       |      |Hue-  |Hue+  |
- *                                 |ness- |ness+ |------|       |------|      |      |
+ *                                 |      |      |      |       |      |      |      |
+ *                                 |      |      |------|       |------|      |      |
  *                                 |      |      |      |       |      |      |      |
  *                                 `--------------------'       `--------------------'
  */
-// SYMBOLS
-[SYMB] = LAYOUT_ergodox(
+// SHIFTOLS
+[SHIFT] = LAYOUT_ergodox(
        // left hand
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -138,29 +183,29 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS
 ),
-/* Keymap 2: Media and mouse keys
+/* Keymap 2: Layer-1
  *
- * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
- * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * |        |      |      | MsUp |      |      |      |           |      |      |      |      |      |      |        |
- * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |        |      |MsLeft|MsDown|MsRght|      |------|           |------|      |      |      |      |      |  Play  |
- * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |        |      |      |      |      |      |      |           |      |      |      | Prev | Next |      |        |
- * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |      |      |      | Lclk | Rclk |                                       |VolUp |VolDn | Mute |      |      |
- *   `----------------------------------'                                       `----------------------------------'
+ * ,---------------------------------------------------.           ,--------------------------------------------------.
+ * |         |  F1  |  F2  |  F3  |  F4  |  F5  |      |           |      |  F6  |  F7  |  F8  |  F9  |PrtScr|        |
+ * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
+ * |         |   |  |      |  &   |  [   |  ]   |      |           |      |      |      |  7   |  8   | 9    |        |
+ * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |         |      |  ù   |  `   |  €   |      |------|           |------|      |      |  4   |  5   | 6    |        |
+ * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |         |  /   |  \   |  {   |  }   |  ~   |      |           |      |      |      |  1   |  2   | 3    |        |
+ * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+ *   |       |      |      |      |      |                                       |      |  0   |      |      |      |
+ *   `-----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
- *                                        |      |      |       |      |      |
+ *                                        |      |      |       |      |       |
  *                                 ,------|------|------|       |------+------+------.
- *                                 |      |      |      |       |      |      |Brwser|
- *                                 |      |      |------|       |------|      |Back  |
+ *                                 |      |      |      |       |      |      |      |
+ *                                 |      |      |------|       |------|      |      |
  *                                 |      |      |      |       |      |      |      |
  *                                 `--------------------'       `--------------------'
  */
 // MEDIA AND MOUSE
-[MDIA] = LAYOUT_ergodox(
+[LAYER_2] = LAYOUT_ergodox(
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -182,7 +227,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 const uint16_t PROGMEM fn_actions[] = {
-    [1] = ACTION_LAYER_TAP_TOGGLE(SYMB)                // FN1 - Momentary Layer 1 (Symbols)
+    [1] = ACTION_LAYER_TAP_TOGGLE(SHIFT)                // FN1 - Momentary Layer 1 (SHIFTols)
 };
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
@@ -269,7 +314,7 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case M_C_CEDILLE:
+    case M_C_CEDILLE ... M_EGAL :
       if (record->event.pressed) {
         uint16_t index = keycode - M_C_CEDILLE;
         send_string(alt_codes[index][is_mac]);
@@ -322,8 +367,8 @@ uint32_t layer_state_set_user(uint32_t state) {
         break;
       case 1:
         ergodox_right_led_1_on();
-        #ifdef RGBLIGHT_COLOR_LAYER_1
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_1);
+        #ifdef RGBLIGHT_COLOR_LAYER_2
+          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_2);
         #endif
         break;
       case 2:
@@ -373,3 +418,25 @@ uint32_t layer_state_set_user(uint32_t state) {
 
   return state;
 };
+
+/* Empty Keymap: -
+ *
+ * ,---------------------------------------------------.           ,--------------------------------------------------.
+ * |         |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+ * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
+ * |         |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+ * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |         |      |      |      |      |      |------|           |------|      |      |      |      |      |        |
+ * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |         |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+ * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+ *   |       |      |      |      |      |                                       |      |      |      |      |      |
+ *   `-----------------------------------'                                       `----------------------------------'
+ *                                        ,-------------.       ,-------------.
+ *                                        |      |      |       |      |       |
+ *                                 ,------|------|------|       |------+------+------.
+ *                                 |      |      |      |       |      |      |      |
+ *                                 |      |      |------|       |------|      |      |
+ *                                 |      |      |      |       |      |      |      |
+ *                                 `--------------------'       `--------------------'
+ */
