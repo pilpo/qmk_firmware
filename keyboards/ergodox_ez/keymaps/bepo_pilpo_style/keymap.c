@@ -8,6 +8,17 @@
 #define SHIFT 1 // shift layer 
 #define LAYER_2 2 // "first" true layer 
 
+#define M_1        LSFT(KC_1)
+#define M_2        LSFT(KC_2)
+#define M_3        LSFT(KC_3)
+#define M_4        LSFT(KC_4)
+#define M_5        LSFT(KC_5)
+#define M_6        LSFT(KC_6)
+#define M_7        LSFT(KC_7)
+#define M_8        LSFT(KC_8)
+#define M_9        LSFT(KC_9)
+#define M_0        LSFT(KC_0)
+
 enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
   M_C_CEDILLE_MAJ,
@@ -286,11 +297,11 @@ KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,              K
  * ,---------------------------------------------------.           ,--------------------------------------------------.
  * |         |  1   |  2   |  3   |  4   |  5   |  #   |           |  ^   | 6    |  7   | 8    | 9    | 0    |        |
  * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
- * |         |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+ * |         |      |  É   |      |      |  È   |      |           |      |      |      |      |      | Ç    |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |         |      |      |      |      | ;    |------|           |------|      |      |      |      |      |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |      |      |      |      | :    |      |           |      | ?    |      |      |      |      |        |
+ * |         |  Ê   |  À   |      |      | :    |      |           |      | ?    |      |      |      |      |        |
  * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
  *   |       |      |      |      | $    |                                       |      |      |      |      |      |
  *   `-----------------------------------'                                       `----------------------------------'
@@ -306,16 +317,16 @@ KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,              K
 [SHIFT] = LAYOUT_ergodox(
        // left hand
        KC_TRNS, KC_1,     KC_2,   KC_3,     KC_4,   KC_5,         M_DIESE,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,      KC_TRNS,
+       KC_TRNS, KC_TRNS, M_E_AIGUE_MAJ, KC_TRNS, KC_TRNS, M_E_GRAVE_MAJ,      KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_PT_VIRGULE,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_DOUBLE_PT,  KC_TRNS,
+       KC_TRNS, M_E_CIRCONFLEXE_MAJ, M_A_GRAVE_MAJ, KC_TRNS, KC_TRNS, M_DOUBLE_PT,  KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_DOLLAR,
                                            KC_TRNS, KC_TRNS,
                                                     KC_TRNS,
                                   KC_TRNS, KC_TRNS, KC_TRNS,
     // right hand
        M_ACCENT_CIRCONF,  KC_6, KC_7, KC_8, KC_9, KC_0, KC_TRNS,
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_C_CEDILLE_MAJ, KC_TRNS,
                  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS,  M_PT_INTERROG, M_M_MAJ, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -356,9 +367,9 @@ KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,              K
                                   KC_TRNS, KC_TRNS, KC_TRNS,
     // right hand
        KC_TRNS,  KC_F6, KC_F7, KC_F8, KC_F9, KC_PSCREEN, KC_TRNS,
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_7, KC_8, KC_9, KC_TRNS,
-                 KC_TRNS, KC_TRNS, KC_4, KC_5, KC_6, KC_TRNS,
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_1, KC_2, KC_3, KC_TRNS,
+       KC_TRNS,  KC_TRNS, KC_TRNS, M_7, M_8, M_9, KC_TRNS,
+                 KC_TRNS, KC_TRNS, M_4, M_5, M_6, KC_TRNS,
+       KC_TRNS,  KC_TRNS, KC_TRNS, M_1, M_2, M_3, KC_TRNS,
                           KC_TRNS, KC_0, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS,
        KC_TRNS,
@@ -453,6 +464,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         || keycode == M_PT_INTERROG
         || keycode == M_DIESE
         || keycode == M_DOLLAR
+        || keycode == M_C_CEDILLE_MAJ
+        || keycode == M_A_GRAVE_MAJ
+        || keycode == M_E_AIGUE_MAJ
+        || keycode == M_E_GRAVE_MAJ
+        || keycode == M_E_CIRCONFLEXE_MAJ
       ){
         unregister_code(KC_LSFT);
       }
