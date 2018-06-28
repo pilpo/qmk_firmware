@@ -10,9 +10,6 @@
 
 enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
-  EPRM,
-  VRSN,
-  RGB_SLD,
   M_C_CEDILLE,
   M_DOUBLE_QUOTE,
   M_CHEVRON_INF,
@@ -26,6 +23,29 @@ enum custom_keycodes {
   M_MOINS,
   M_FOIS,
   M_EGAL,
+  M_SLASH,
+  M_E_AIGUE,
+  M_E_GRAVE,
+  M_E_CIRCONFLEXE,
+  M_VIRGULE,
+  M_POINT,
+  M_BARRE_VERTICALE,
+  M_ET_COM,
+  M_CROCHET_OUV,
+  M_CROCHET_FERM,
+  M_SIMPLE_QUOTE,
+  M_PT_EXCLAM,
+  M_PT_VIRGULE,
+  M_DOUBLE_PT,
+  M_PT_INTERROG,
+  M_ACCENT_CIRCONF,
+  M_U_GRAVE,
+  M_QHOTE_INVERS,
+  M_EURO,
+  M_BACKSLASH,
+  M_ACCO_OUV,
+  M_ACCO_FERM,
+  M_TILD,
   CPY
 };
 
@@ -33,12 +53,12 @@ enum custom_keycodes {
 static uint16_t key_timer_cpy;
 
 bool is_mac = false;  // Default to windows operation for extended character code sequences 
-                      // for future, use this on linux with unicode
+                      // for linux we have to use unicode
                       // for example see https://askubuntu.com/questions/88347/how-can-i-type-ascii-characters-like-alt-numpad-in-windows
                       // Alt + 255 on Windows creates a non-breaking space (ASCII 255)
                       // This character in Unicode is U+00A0
                       // On Ubuntu, type it as Ctrl + Shift + U then 00A0
-char *alt_codes[][2] = {
+char *alt_codes[][2] = { // if use on windows & mac & linux, use [][3], 0 for windows, 1 for mac et 2 for linux
     {
         SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_2)SS_TAP(X_KP_8)),                // ALT+128 Ç
         SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
@@ -76,12 +96,80 @@ char *alt_codes[][2] = {
         SS_LALT(SS_TAP(X_KP_4)SS_TAP(X_KP_2)),                              // ALT+42 * 
         SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
     }, {
+        SS_LALT(SS_TAP(X_KP_6)SS_TAP(X_KP_1)),                              // ALT+61 =
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
         SS_LALT(SS_TAP(X_KP_4)SS_TAP(X_KP_7)),                              // ALT+47 /
         SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
     }, {
-        SS_LALT(SS_TAP(X_KP_6)SS_TAP(X_KP_1)),                              // ALT+61 =
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_4)SS_TAP(X_KP_4)),                // ALT+144 É
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_2)SS_TAP(X_KP_1)SS_TAP(X_KP_2)),                // ALT+212 È
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_2)SS_TAP(X_KP_1)SS_TAP(X_KP_0)),                // ALT+210 Ê
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_4)SS_TAP(X_KP_4)),                              // ALT+44 ,
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_4)SS_TAP(X_KP_6)),                              // ALT+46 .
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_2)SS_TAP(X_KP_4)),                // ALT+124 |
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_3)SS_TAP(X_KP_8)),                              // ALT+38 &
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_9)SS_TAP(X_KP_1)),                              // ALT+91 [
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_9)SS_TAP(X_KP_3)),                              // ALT+93 ]
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_3)SS_TAP(X_KP_9)),                              // ALT+39 '
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_3)SS_TAP(X_KP_3)),                              // ALT+33 !
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_5)SS_TAP(X_KP_8)),                              // ALT+58 :
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_5)SS_TAP(X_KP_9)),                              // ALT+59 ;
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_6)SS_TAP(X_KP_3)),                              // ALT+63 ?
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_9)SS_TAP(X_KP_4)),                              // ALT+94 ^
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_6)SS_TAP(X_KP_3)),                // ALT+163 ú
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_9)SS_TAP(X_KP_6)),                              // ALT+96 `
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_0)SS_TAP(X_KP_1)SS_TAP(X_KP_2)SS_TAP(X_KP_8)),  // ALT+0128 €
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_9)SS_TAP(X_KP_2)),                              // ALT+92 
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_2)SS_TAP(X_KP_3)),                // ALT+123 {
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_2)SS_TAP(X_KP_5)),                // ALT+125 }
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_2)SS_TAP(X_KP_6)),                // ALT+126 ~
         SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
     }}; 
+
+
 
 char *combo_codes[][2] = {
     {
@@ -122,14 +210,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Otherwise, it needs KC_*
 [BASE] = LAYOUT_ergodox(  // layer 0 : default
 // left hand
-KC_ESCAPE,      M_DOUBLE_QUOTE,         M_CHEVRON_INF,   M_CHEVRON_SUP,   M_PARENTHESE_OUV,   M_PARENTHESE_FERM,   M_TIRET_BAS,
-KC_DELT,        KC_Q,         KC_W,   KC_E,   KC_R,   KC_T,   TG(SHIFT),
-KC_BSPC,        KC_A,         KC_S,   KC_D,   KC_F,   KC_G,
-M(0),        CTL_T(KC_Z),  KC_X,   M_C_CEDILLE,   M(2),   CPY,   ALL_T(KC_NO),
-LT(SHIFT,KC_GRV),KC_QUOT,      LALT(KC_LSFT),  KC_LEFT,KC_RGHT,
-                                      ALT_T(KC_APP),  KC_LGUI,
-                                                      KC_HOME,
-                                       KC_SPC,KC_BSPC,KC_END,
+KC_ESCAPE,        M_DOUBLE_QUOTE,         M_CHEVRON_INF,    M_CHEVRON_SUP,    M_PARENTHESE_OUV,   M_PARENTHESE_FERM,    M_TIRET_BAS,
+KC_TAB,           KC_B,                   KC_W,             KC_E,             KC_R,               KC_T,                 TG(SHIFT),
+KC_BSPC,          KC_A,                   KC_U,             KC_I,             KC_E,               KC_G,
+M(0),             CTL_T(KC_Z),            KC_X,             M_C_CEDILLE,      M(2),               CPY,                  ALL_T(KC_NO),
+LT(SHIFT,KC_GRV), KC_QUOT,                LALT(KC_LSFT),    KC_LEFT,KC_RGHT,
+                                                                                                              ALT_T(KC_APP),  KC_LGUI,
+                                                                                                                              KC_HOME,
+                                                                                                               KC_SPC,KC_BSPC,KC_END,
 
 // right hand
 M_PRCT,     M_AROBASE,   M_PLUS,  M_MOINS,   M_FOIS,   M_EGAL,             KC_MINS,
@@ -162,7 +250,7 @@ KC_PGDN,KC_TAB, KC_ENT
  *                                 |      |      |      |       |      |      |      |
  *                                 `--------------------'       `--------------------'
  */
-// SHIFTOLS
+// Keymap 1: SHIFT Layer-1
 [SHIFT] = LAYOUT_ergodox(
        // left hand
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -183,7 +271,7 @@ KC_PGDN,KC_TAB, KC_ENT
        KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS
 ),
-/* Keymap 2: Layer-1
+/* Keymap 2: Layer-2
  *
  * ,---------------------------------------------------.           ,--------------------------------------------------.
  * |         |  F1  |  F2  |  F3  |  F4  |  F5  |      |           |      |  F6  |  F7  |  F8  |  F9  |PrtScr|        |
@@ -204,6 +292,7 @@ KC_PGDN,KC_TAB, KC_ENT
  *                                 |      |      |      |       |      |      |      |
  *                                 `--------------------'       `--------------------'
  */
+
 // MEDIA AND MOUSE
 [LAYER_2] = LAYOUT_ergodox(
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
