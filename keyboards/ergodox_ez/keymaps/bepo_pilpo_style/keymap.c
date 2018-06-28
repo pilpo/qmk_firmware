@@ -10,7 +10,7 @@
 
 enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
-  M_C_CEDILLE,
+  M_C_CEDILLE_MAJ,
   M_DOUBLE_QUOTE,
   M_CHEVRON_INF,
   M_CHEVRON_SUP,
@@ -24,9 +24,9 @@ enum custom_keycodes {
   M_FOIS,
   M_EGAL,
   M_SLASH,
-  M_E_AIGUE,
-  M_E_GRAVE,
-  M_E_CIRCONFLEXE,
+  M_E_AIGUE_MAJ,
+  M_E_GRAVE_MAJ,
+  M_E_CIRCONFLEXE_MAJ,
   M_VIRGULE,
   M_POINT,
   M_BARRE_VERTICALE,
@@ -35,8 +35,8 @@ enum custom_keycodes {
   M_CROCHET_FERM,
   M_SIMPLE_QUOTE,
   M_PT_EXCLAM,
-  M_PT_VIRGULE,
   M_DOUBLE_PT,
+  M_PT_VIRGULE,
   M_PT_INTERROG,
   M_ACCENT_CIRCONF,
   M_U_GRAVE,
@@ -46,7 +46,21 @@ enum custom_keycodes {
   M_ACCO_OUV,
   M_ACCO_FERM,
   M_TILD,
+  M_E_AIGUE,
+  M_E_GRAVE,
+  M_E_CIRCONFLEXE,
+  M_E_TREMA,
+  M_C_CEDILLE,
+  M_A_GRAVE_MAJ,
+  M_A_GRAVE,  
+  M_M,
+  M_M_MAJ,
   CPY
+};
+enum custom_macro {
+  SHIFTED,
+  SHIFTED_DOUBLE_PT,
+  SHIFTED_PT_VIRGULE
 };
 
 #define KEY_DELAY 200
@@ -58,6 +72,8 @@ bool is_mac = false;  // Default to windows operation for extended character cod
                       // Alt + 255 on Windows creates a non-breaking space (ASCII 255)
                       // This character in Unicode is U+00A0
                       // On Ubuntu, type it as Ctrl + Shift + U then 00A0
+                      // (cf unicode_map)
+                      
 char *alt_codes[][2] = { // if use on windows & mac & linux, use [][3], 0 for windows, 1 for mac et 2 for linux
     {
         SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_2)SS_TAP(X_KP_8)),                // ALT+128 Ç
@@ -167,6 +183,33 @@ char *alt_codes[][2] = { // if use on windows & mac & linux, use [][3], 0 for wi
     }, {
         SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_2)SS_TAP(X_KP_6)),                // ALT+126 ~
         SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_3)SS_TAP(X_KP_0)),                // ALT+130 é
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_3)SS_TAP(X_KP_8)),                // ALT+138 è
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_3)SS_TAP(X_KP_6)),                // ALT+136 ê
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_3)SS_TAP(X_KP_7)),                // ALT+137 ë
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_3)SS_TAP(X_KP_5)),                // ALT+135 ç
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_8)SS_TAP(X_KP_3)),                // ALT+183 À
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_3)SS_TAP(X_KP_3)),                // ALT+133 à
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_0)SS_TAP(X_KP_9)),                // ALT+109 m
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_7)SS_TAP(X_KP_7)),                              // ALT+77 M
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
     }}; 
 
 
@@ -184,8 +227,8 @@ char *combo_codes[][2] = {
     }}; 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+ 
 /* Keymap 0: Basic layer
- *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * | Esc    |   "  |   <  |   >  |   (  |   )  | _    |           | %    |   @  |   +  |   -  |   *  |   =  |  TL1   |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
@@ -195,39 +238,41 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------| END  |           |  C   |------+------+------+------+------+--------|
  * | LShift |   Ê  |   À  |   Y  |   X  |   .  |      |           |      |   '  |   M  |   G  |   H  |   F  | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |Ctrl  |   Z  | Alt  |   K  |   !  |                                       |   ←  |   ↑  |   ↓  |   →  |  F4  |
+ *   |Ctrl  |   Z  | Alt  |   K  |   !  |                                       |   ←  |   ↑  |   ↓  |   →  | Ctrl |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
- *                                        | F5   | F6   |       | WIN  | DEL  |
+ *                                        | F4   | F5   |       | WIN  | DEL  |
  *                                 ,------|------|------|       |------+--------+------.
- *                                 |      |      | F7   |       | PgUp |        |      |
- *                                 | SPACE|ALTTAB|------|       |------|  FN      |SPACE |
+ *                                 |      |      | F6   |       | PgUp |        |      |
+ *                                 | SPACE|  F7  |------|       |------|  TL1   |SPACE |
  *                                 |      |      | F8   |       | PgDn |        |      |
  *                                 `--------------------'       `----------------------'
  */
-
+// X = M(2)
 // If it accepts an argument (i.e, is a function), it doesn't need KC_.
 // Otherwise, it needs KC_*
 [BASE] = LAYOUT_ergodox(  // layer 0 : default
 // left hand
 KC_ESCAPE,        M_DOUBLE_QUOTE,         M_CHEVRON_INF,    M_CHEVRON_SUP,    M_PARENTHESE_OUV,   M_PARENTHESE_FERM,    M_TIRET_BAS,
-KC_TAB,           KC_B,                   KC_W,             KC_E,             KC_R,               KC_T,                 TG(SHIFT),
-KC_BSPC,          KC_A,                   KC_U,             KC_I,             KC_E,               KC_G,
-M(0),             CTL_T(KC_Z),            KC_X,             M_C_CEDILLE,      M(2),               CPY,                  ALL_T(KC_NO),
-LT(SHIFT,KC_GRV), KC_QUOT,                LALT(KC_LSFT),    KC_LEFT,KC_RGHT,
-                                                                                                              ALT_T(KC_APP),  KC_LGUI,
-                                                                                                                              KC_HOME,
-                                                                                                               KC_SPC,KC_BSPC,KC_END,
+KC_TAB,           KC_B,                   M_E_AIGUE,        KC_P,             KC_O,               M_E_GRAVE,            KC_HOME,
+MO(LAYER_2),      KC_A,                   KC_U,             KC_I,             KC_E,               M_VIRGULE,
+M(SHIFTED),       M_E_CIRCONFLEXE,        M_A_GRAVE,        KC_Y,             KC_X,               M_POINT,              KC_END,
+KC_LCTRL,         KC_Z,                   KC_LALT,          KC_K,             M_PT_EXCLAM,
+
+                                                                                                                        KC_F4,  KC_F5,
+                                                                                                                                KC_F6,
+                                                                                                                        KC_SPC,KC_F7, KC_F8,
 
 // right hand
-M_PRCT,     M_AROBASE,   M_PLUS,  M_MOINS,   M_FOIS,   M_EGAL,             KC_MINS,
-TG(SHIFT),    KC_Y,   KC_U,  KC_I,   KC_O,   KC_P,             KC_BSLS,
-KC_H,   KC_J,  KC_K,   KC_L,   LT(LAYER_2, KC_SCLN),GUI_T(KC_QUOT),
-MEH_T(KC_NO),KC_N,   KC_M,  KC_COMM,KC_DOT, CTL_T(KC_SLSH),   KC_RSFT,
-KC_UP, KC_DOWN,KC_LBRC,KC_RBRC,          KC_FN1,
-KC_LALT,        CTL_T(KC_ESC),
-KC_PGUP,
-KC_PGDN,KC_TAB, KC_ENT
+M_PRCT,           M_AROBASE,              M_PLUS,           M_MOINS,          M_FOIS,             M_EGAL,               TG(LAYER_2),
+KC_V,             KC_D,                   KC_L,             KC_J,             KC_W,               M_C_CEDILLE,          KC_DEL,
+                  KC_T,                   KC_S,             KC_R,             KC_N,               KC_Q,                 KC_ENT,                 
+KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,              KC_H,               KC_F,                M(SHIFTED),
+                                          KC_LEFT,          KC_UP,            KC_DOWN,            KC_RIGHT,             KC_RCTRL,       
+
+                                                                                                                        KC_RGUI, KC_DEL,
+                                                                                                                        KC_PGUP,
+                                                                                                                        KC_PGDN,MO(LAYER_2), KC_SPC
     ),
 /* Keymap 1: Shift Layer
  *
@@ -253,19 +298,19 @@ KC_PGDN,KC_TAB, KC_ENT
 // Keymap 1: SHIFT Layer-1
 [SHIFT] = LAYOUT_ergodox(
        // left hand
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_TRNS, M(1), KC_COMM, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_1,     KC_2,   KC_3,     KC_4,   KC_5,         KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,      KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_PT_VIRGULE,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_DOUBLE_PT,  KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_ACCENT_CIRCONF,
                                            KC_TRNS, KC_TRNS,
                                                     KC_TRNS,
                                   KC_TRNS, KC_TRNS, KC_TRNS,
     // right hand
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS,  KC_6, KC_7, KC_8, KC_9, KC_0, KC_TRNS,
        KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS,  M_PT_INTERROG, M_M_MAJ, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS,
        KC_TRNS,
@@ -293,22 +338,21 @@ KC_PGDN,KC_TAB, KC_ENT
  *                                 `--------------------'       `--------------------'
  */
 
-// MEDIA AND MOUSE
 [LAYER_2] = LAYOUT_ergodox(
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_F1,              KC_F2,        KC_F3,          KC_F4,          KC_F5,          KC_TRNS,
+       KC_TRNS, M_BARRE_VERTICALE,  KC_TRNS,      M_ET_COM,       M_CROCHET_OUV,  M_CROCHET_FERM, KC_TRNS,
+       KC_TRNS, KC_TRNS,            M_U_GRAVE,    M_QHOTE_INVERS, M_EURO,         KC_TRNS,
+       KC_TRNS, M_SLASH,            M_BACKSLASH,  M_ACCO_OUV,     M_ACCO_FERM,    M_TILD,         KC_TRNS,
+       KC_TRNS, KC_TRNS,            KC_TRNS,      KC_TRNS,        KC_TRNS,
                                            KC_TRNS, KC_TRNS,
                                                     KC_TRNS,
                                   KC_TRNS, KC_TRNS, KC_TRNS,
     // right hand
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-                          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS,  KC_F6, KC_F7, KC_F8, KC_F9, KC_PSCREEN, KC_TRNS,
+       KC_TRNS,  KC_TRNS, KC_TRNS, KC_7, KC_8, KC_9, KC_TRNS,
+                 KC_TRNS, KC_TRNS, KC_4, KC_5, KC_6, KC_TRNS,
+       KC_TRNS,  KC_TRNS, KC_TRNS, KC_1, KC_2, KC_3, KC_TRNS,
+                          KC_TRNS, KC_0, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS,
        KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS
@@ -318,17 +362,16 @@ KC_PGDN,KC_TAB, KC_ENT
 const uint16_t PROGMEM fn_actions[] = {
     [1] = ACTION_LAYER_TAP_TOGGLE(SHIFT)                // FN1 - Momentary Layer 1 (SHIFTols)
 };
-
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
   // MACRODOWN only works in this function
   switch(id) {
-    case 0: // M(0)
+    case SHIFTED: // M(0)
         if (record->event.pressed) {
             register_code(KC_LSFT);
-            layer_on(1);
+            layer_on(SHIFT);
         } else {
-            layer_off(1);
+            layer_off(SHIFT);
             unregister_code(KC_LSFT);
         }
         break;       
@@ -400,12 +443,26 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
   }
   return MACRO_NONE;
 };
-
+;;;;;;;;;;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case M_C_CEDILLE ... M_EGAL :
+    case M_PT_VIRGULE :
+    case M_DOUBLE_PT :
+    case M_ACCENT_CIRCONF :
+    case M_PT_INTERROG :
       if (record->event.pressed) {
-        uint16_t index = keycode - M_C_CEDILLE;
+        unregister_code(KC_LSFT);
+        uint16_t index = keycode - M_C_CEDILLE_MAJ;
+        send_string(alt_codes[index][is_mac]);
+      }
+      return false;
+      break;
+  }
+
+  switch (keycode) {
+    case M_C_CEDILLE_MAJ ... M_M_MAJ :
+      if (record->event.pressed) {
+        uint16_t index = keycode - M_C_CEDILLE_MAJ;
         send_string(alt_codes[index][is_mac]);
       }
       return false;
