@@ -21,6 +21,7 @@
 
 enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
+  // FIRST LETTER
   M_C_CEDILLE_MAJ,
   M_DOUBLE_QUOTE,
   M_CHEVRON_INF,
@@ -76,16 +77,20 @@ enum custom_keycodes {
   M_W,  
   M_Z_MAJ,
   M_Z,
-  CPY
+  // LAST LETTER
+  // FIRST "MACRO"
+  CUT,
+  COPY,
+  PAST
+  // LAST "MACRO"
 };
-enum custom_macro {
-  SHIFTED,
-  SHIFTED_DOUBLE_PT,
-  SHIFTED_PT_VIRGULE
+
+enum custom_layer {
+  SHIFTED
 };
 
 #define KEY_DELAY 200
-static uint16_t key_timer_cpy;
+static uint16_t key_timer;
 
 bool is_mac = false;  // Default to windows operation for extended character code sequences 
                       // for linux we have to use unicode
@@ -93,7 +98,7 @@ bool is_mac = false;  // Default to windows operation for extended character cod
                       // Alt + 255 on Windows creates a non-breaking space (ASCII 255)
                       // This character in Unicode is U+00A0
                       // On Ubuntu, type it as Ctrl + Shift + U then 00A0
-                      // (cf unicode_map)
+                      // (cf https://docs.qmk.fm/#/feature_unicode)
                       
 char *alt_codes[][2] = { // if use on windows & mac & linux, use [][3], 0 for windows, 1 for mac et 2 for linux
     {
@@ -263,17 +268,21 @@ char *alt_codes[][2] = { // if use on windows & mac & linux, use [][3], 0 for wi
         SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
     }}; 
 
-
+enum enum_combo_code {
+  COMBO_CUT,
+  COMBO_COPY,
+  COMBO_PAST
+};
 
 char *combo_codes[][2] = {
     {
+        SS_LCTRL(SS_TAP(X_X)),                  // CUT
+        SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
+    }, {
         SS_LCTRL(SS_TAP(X_C)),                  // COPY
         SS_LALT(SS_TAP(X_RBRACKET))             // mac shortcut for later
     }, {
         SS_LCTRL(SS_TAP(X_V)),                  // PAST
-        SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
-    }, {
-        SS_LCTRL(SS_TAP(X_X)),                  // CUT
         SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
     }}; 
 
@@ -306,7 +315,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 KC_ESCAPE,        M_DOUBLE_QUOTE,         M_CHEVRON_INF,    M_CHEVRON_SUP,    M_PARENTHESE_OUV,   M_PARENTHESE_FERM,    M_TIRET_BAS,
 KC_TAB,           KC_B,                   M_E_AIGUE,        KC_P,             KC_O,               M_E_GRAVE,            KC_HOME,
 MO(LAYER_2),      M_A,                    KC_U,             KC_I,             KC_E,               M_VIRGULE,
-M(SHIFTED),       M_E_CIRCONFLEXE,        M_A_GRAVE,        KC_Y,             KC_X,               M_POINT,              KC_END,
+M(SHIFTED),       M_E_CIRCONFLEXE,        CUT,              COPY,             PAST,               M_POINT,              KC_END,
 KC_LCTRL,         M_Z,                    KC_LALT,          KC_K,             M_PT_EXCLAM,
 
                                                                                                                         KC_F4,  KC_F5,
@@ -410,13 +419,14 @@ KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,             KC
 };
 
 const uint16_t PROGMEM fn_actions[] = {
-    [1] = ACTION_LAYER_TAP_TOGGLE(SHIFT)                // FN1 - Momentary Layer 1 (SHIFTols)
+    [1] = ACTION_LAYER_TAP_TOGGLE(SHIFT)                // FN1 - Momentary Layer 1 (SHIFTED)
 };
+
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
   // MACRODOWN only works in this function
   switch(id) {
-    case SHIFTED: // M(0)
+    case SHIFTED:
         if (record->event.pressed) {
             register_code(KC_LSFT);
             layer_on(SHIFT);
@@ -425,63 +435,6 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
             unregister_code(KC_LSFT);
         }
         break;       
-    case 2:
-          if (record->event.pressed) {
-            if (record->tap.count) {
-              if (record->tap.interrupted) {
-                record->tap.count = 0;
-                // hold press action
-                return MACRO(D(LCTRL), T(C));
-              } else {
-                // tap press action
-                register_code(KC_C);
-              }
-            } else {
-              // hold press action
-              return MACRO(D(LCTRL), T(C));
-
-            }
-          } else {
-            if (record->tap.count) {
-              // tap release action
-              unregister_code(KC_C);
-            } else {
-              // hold release action
-              unregister_code(KC_LCTRL);
-              unregister_code(KC_C);
-            }
-            record->tap.count = 0;
-          }
-          break;
-    case 3:
-          if (record->event.pressed) {
-            if (record->tap.count) {
-              if (record->tap.interrupted) {
-                record->tap.count = 0;
-                // hold press action
-                return MACRO(D(LCTRL), T(V));
-
-              } else {
-                // tap press action
-                register_code(KC_V);
-              }
-            } else {
-              // hold press action
-              return MACRO(D(LCTRL), T(V));
-
-            }
-          } else {
-            if (record->tap.count) {
-              // tap release action
-              unregister_code(KC_V);
-            } else {
-              // hold release action
-              unregister_code(KC_LCTRL);
-              unregister_code(KC_V);
-            }
-            record->tap.count = 0;
-          }
-          break;
   }
   return MACRO_NONE;
 }
@@ -515,14 +468,39 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    case CPY:
+    case CUT:
       if (record->event.pressed) {
-        key_timer_cpy = timer_read(); // if the key is being pressed, we start the timer.
+        key_timer = timer_read(); // if the key is being pressed, we start the timer.
       } else {
-        if (timer_elapsed(key_timer_cpy) < KEY_DELAY) { // when the key is being released, we check the timer
-          send_string(SS_TAP(X_C)); // if the key is released before KEY_DELAY then we send c
+        if (timer_elapsed(key_timer) < KEY_DELAY) { // when the key is being released, we check the timer
+          uint16_t index = M_A_GRAVE - M_C_CEDILLE_MAJ;
+          send_string(alt_codes[index][is_mac]); // if the key is released before KEY_DELAY then we send ...
         }else{ // if the key is released after KEY_DELAY then we send CTRL+c
-          send_string(combo_codes[0][is_mac]);
+          send_string(combo_codes[COMBO_CUT][is_mac]);
+        }
+      }
+      return false;
+      break;    
+    case COPY:
+      if (record->event.pressed) {
+        key_timer = timer_read(); // if the key is being pressed, we start the timer.
+      } else {
+        if (timer_elapsed(key_timer) < KEY_DELAY) { // when the key is being released, we check the timer
+          send_string("y"); // if the key is released before KEY_DELAY then we send ...
+        }else{ // if the key is released after KEY_DELAY then we send CTRL+c
+          send_string(combo_codes[COMBO_COPY][is_mac]);
+        }
+      }
+      return false;
+      break;    
+    case PAST:
+      if (record->event.pressed) {
+        key_timer = timer_read(); // if the key is being pressed, we start the timer.
+      } else {
+        if (timer_elapsed(key_timer) < KEY_DELAY) { // when the key is being released, we check the timer
+          send_string("x"); // if the key is released before KEY_DELAY then we send ...
+        }else{ // if the key is released after KEY_DELAY then we send CTRL+c
+          send_string(combo_codes[COMBO_PAST][is_mac]);
         }
       }
       return false;

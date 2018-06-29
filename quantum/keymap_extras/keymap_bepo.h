@@ -211,7 +211,7 @@
 #define BP_THRN                     BP_THORN
 #define BP_SHARP_S                  ALTGR(BP_S)         // ß
 #define BP_SRPS                     BP_SHARP_S
-#define BP_REGISTERED_TRADEMARK     ALTGR(BP_R)         // ®
+#define BP_REGISTERED_TRADEMARK     ALTGR(BP_R)         // ® 
 #define BP_RTM                      BP_REGISTERED_TRADEMARK
 #define BP_DEAD_TILDE               ALTGR(BP_N)         // dead ~
 #define BP_DTLD                     BP_DEAD_TILDE
