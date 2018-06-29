@@ -7,7 +7,7 @@
 #define BASE 0 // default layer
 #define SHIFT 1 // shift layer 
 #define LAYER_2 2 // "first" true layer 
-
+#define TAPPING_TOGGLE 1
 #define M_1        LSFT(KC_1)
 #define M_2        LSFT(KC_2)
 #define M_3        LSFT(KC_3)
@@ -314,7 +314,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // left hand
 KC_ESCAPE,        M_DOUBLE_QUOTE,         M_CHEVRON_INF,    M_CHEVRON_SUP,    M_PARENTHESE_OUV,   M_PARENTHESE_FERM,    M_TIRET_BAS,
 KC_TAB,           KC_B,                   M_E_AIGUE,        KC_P,             KC_O,               M_E_GRAVE,            KC_HOME,
-MO(LAYER_2),      M_A,                    KC_U,             KC_I,             KC_E,               M_VIRGULE,
+TT(LAYER_2),      M_A,                    KC_U,             KC_I,             KC_E,               M_VIRGULE,
 M(SHIFTED),       M_E_CIRCONFLEXE,        CUT,              COPY,             PAST,               M_POINT,              KC_END,
 KC_LCTRL,         KC_W,                    KC_LALT,          KC_K,             M_PT_EXCLAM,
 
@@ -380,11 +380,11 @@ KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,             KC
  * ,---------------------------------------------------.           ,--------------------------------------------------.
  * |         |  F1  |  F2  |  F3  |  F4  |  F5  |      |           |      |  F6  |  F7  |  F8  |  F9  |PrtScr|        |
  * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
- * |         |   |  |      |  &   |  [   |  ]   |      |           |      |      |      |  7   |  8   | 9    |        |
+ * |         |   |  |      |  &   |  [   |  ]   |  F11 |           |      |      |      |  7   |  8   | 9    |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |         |      |  ù   |  `   |  €   |      |------|           |------|      |      |  4   |  5   | 6    |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |  /   |  \   |  {   |  }   |  ~   |      |           |      |      |      |  1   |  2   | 3    |        |
+ * |         |  /   |  \   |  {   |  }   |  ~   |  F10 |           |      |  F12 |      |  1   |  2   | 3    |        |
  * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
  *   |       |      |      |      |      |                                       |      |  0   |      |      |      |
  *   `-----------------------------------'                                       `----------------------------------'
@@ -399,9 +399,9 @@ KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,             KC
 
 [LAYER_2] = LAYOUT_ergodox(
        KC_TRNS, KC_F1,              KC_F2,        KC_F3,          KC_F4,          KC_F5,          KC_TRNS,
-       KC_TRNS, M_BARRE_VERTICALE,  KC_TRNS,      M_ET_COM,       M_CROCHET_OUV,  M_CROCHET_FERM, KC_TRNS,
+       KC_TRNS, M_BARRE_VERTICALE,  KC_TRNS,      M_ET_COM,       M_CROCHET_OUV,  M_CROCHET_FERM, KC_F11,
        KC_TRNS, KC_TRNS,            M_U_GRAVE,    M_QHOTE_INVERS, M_EURO,         KC_TRNS,
-       KC_TRNS, M_SLASH,            M_BACKSLASH,  M_ACCO_OUV,     M_ACCO_FERM,    M_TILD,         KC_TRNS,
+       KC_TRNS, M_SLASH,            M_BACKSLASH,  M_ACCO_OUV,     M_ACCO_FERM,    M_TILD,         KC_F10,
        KC_TRNS, KC_TRNS,            KC_TRNS,      KC_TRNS,        KC_TRNS,
                                            KC_TRNS, KC_TRNS,
                                                     KC_TRNS,
@@ -410,7 +410,7 @@ KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,             KC
        KC_TRNS,  KC_F6, KC_F7, KC_F8, KC_F9, KC_PSCREEN, KC_TRNS,
        KC_TRNS,  KC_TRNS, KC_TRNS, M_7, M_8, M_9, KC_TRNS,
                  KC_TRNS, KC_TRNS, M_4, M_5, M_6, KC_TRNS,
-       KC_TRNS,  KC_TRNS, KC_TRNS, M_1, M_2, M_3, KC_TRNS,
+       KC_TRNS,  KC_F12, KC_TRNS, M_1, M_2, M_3, KC_TRNS,
                           KC_TRNS, KC_0, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS,
        KC_TRNS,
