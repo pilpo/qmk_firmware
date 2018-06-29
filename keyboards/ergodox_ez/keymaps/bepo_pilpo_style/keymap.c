@@ -304,7 +304,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                        | F4   | F5   |       | WIN  | DEL  |
  *                                 ,------|------|------|       |------+--------+------.
  *                                 |      |      | F6   |       | PgUp |        |      |
- *                                 | SPACE|  F7  |------|       |------|  TL1   |SPACE |
+ *                                 | SPACE| Undo |------|       |------|  Redo  |SPACE |
  *                                 |      |      | F8   |       | PgDn |        |      |
  *                                 `--------------------'       `----------------------'
  */
@@ -316,11 +316,11 @@ KC_ESCAPE,        M_DOUBLE_QUOTE,         M_CHEVRON_INF,    M_CHEVRON_SUP,    M_
 KC_TAB,           KC_B,                   M_E_AIGUE,        KC_P,             KC_O,               M_E_GRAVE,            KC_HOME,
 MO(LAYER_2),      M_A,                    KC_U,             KC_I,             KC_E,               M_VIRGULE,
 M(SHIFTED),       M_E_CIRCONFLEXE,        CUT,              COPY,             PAST,               M_POINT,              KC_END,
-KC_LCTRL,         M_Z,                    KC_LALT,          KC_K,             M_PT_EXCLAM,
+KC_LCTRL,         KC_W,                    KC_LALT,          KC_K,             M_PT_EXCLAM,
 
                                                                                                                         KC_F4,  KC_F5,
                                                                                                                                 KC_F6,
-                                                                                                                        KC_SPC,KC_F7, KC_F8,
+                                                                                                                        KC_SPC,LCTL(KC_W), KC_F8,
 
 // right hand
 M_PRCT,           M_AROBASE,              M_PLUS,           M_MOINS,          M_FOIS,             M_EGAL,               TG(LAYER_2),
@@ -331,7 +331,7 @@ KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,             KC
 
                                                                                                                         KC_RGUI, KC_DEL,
                                                                                                                         KC_PGUP,
-                                                                                                                        KC_PGDN,TG(LAYER_2), KC_SPC
+                                                                                                                        KC_PGDN,LCTL(KC_Y), KC_SPC
     ),
 /* Keymap 1: Shift Layer
  *
