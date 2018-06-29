@@ -68,6 +68,10 @@ enum custom_keycodes {
   M_M_MAJ,
   M_DIESE,
   M_DOLLAR,
+  M_A_MAJ,
+  M_Q_MAJ,
+  M_A,
+  M_Q,
   CPY
 };
 enum custom_macro {
@@ -229,6 +233,18 @@ char *alt_codes[][2] = { // if use on windows & mac & linux, use [][3], 0 for wi
     }, {
         SS_LALT(SS_TAP(X_KP_3)SS_TAP(X_KP_6)),                              // ALT+36 $ 
         SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_6)SS_TAP(X_KP_5)),                              // ALT+65 A 
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_8)SS_TAP(X_KP_1)),                              // ALT+81 Q
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_9)SS_TAP(X_KP_7)),                              // ALT+97 a
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_1)SS_TAP(X_KP_3)),                // ALT+113 q
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
     }}; 
 
 
@@ -273,7 +289,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // left hand
 KC_ESCAPE,        M_DOUBLE_QUOTE,         M_CHEVRON_INF,    M_CHEVRON_SUP,    M_PARENTHESE_OUV,   M_PARENTHESE_FERM,    M_TIRET_BAS,
 KC_TAB,           KC_B,                   M_E_AIGUE,        KC_P,             KC_O,               M_E_GRAVE,            KC_HOME,
-MO(LAYER_2),      KC_Q,                   KC_U,             KC_I,             KC_E,               M_VIRGULE,
+MO(LAYER_2),      M_A,                    KC_U,             KC_I,             KC_E,               M_VIRGULE,
 M(SHIFTED),       M_E_CIRCONFLEXE,        M_A_GRAVE,        KC_Y,             KC_X,               M_POINT,              KC_END,
 KC_LCTRL,         KC_W,                   KC_LALT,          KC_K,             M_PT_EXCLAM,
 
@@ -284,8 +300,8 @@ KC_LCTRL,         KC_W,                   KC_LALT,          KC_K,             M_
 // right hand
 M_PRCT,           M_AROBASE,              M_PLUS,           M_MOINS,          M_FOIS,             M_EGAL,               TG(LAYER_2),
 KC_V,             KC_D,                   KC_L,             KC_J,             KC_Z,               M_C_CEDILLE,          KC_BSPACE,
-                  KC_T,                   KC_S,             KC_R,             KC_N,               KC_A,                 KC_ENT,                 
-KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,              KC_H,              KC_F,                M(SHIFTED),
+                  KC_T,                   KC_S,             KC_R,             KC_N,               M_Q,                  KC_ENT,                 
+KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,              KC_H,              KC_F,                 M(SHIFTED),
                                           KC_LEFT,          KC_UP,            KC_DOWN,            KC_RIGHT,             KC_RCTRL,       
 
                                                                                                                         KC_RGUI, KC_DEL,
@@ -318,7 +334,7 @@ KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,              K
        // left hand
        KC_TRNS, KC_1,     KC_2,   KC_3,     KC_4,   KC_5,         M_DIESE,
        KC_TRNS, KC_TRNS, M_E_AIGUE_MAJ, KC_TRNS, KC_TRNS, M_E_GRAVE_MAJ,      KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_PT_VIRGULE,
+       KC_TRNS, M_A_MAJ, KC_TRNS, KC_TRNS, KC_TRNS, M_PT_VIRGULE,
        KC_TRNS, M_E_CIRCONFLEXE_MAJ, M_A_GRAVE_MAJ, KC_TRNS, KC_TRNS, M_DOUBLE_PT,  KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_DOLLAR,
                                            KC_TRNS, KC_TRNS,
@@ -327,7 +343,7 @@ KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,              K
     // right hand
        M_ACCENT_CIRCONF,  KC_6, KC_7, KC_8, KC_9, KC_0, KC_TRNS,
        KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_C_CEDILLE_MAJ, KC_TRNS,
-                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_Q_MAJ, KC_TRNS,
        KC_TRNS,  M_PT_INTERROG, M_M_MAJ, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS,
@@ -456,7 +472,7 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case M_C_CEDILLE_MAJ ... M_DOLLAR :
+    case M_C_CEDILLE_MAJ ... M_Q :
       if( // handle the shift layer
           keycode == M_PT_VIRGULE 
         || keycode == M_DOUBLE_PT
@@ -470,6 +486,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         || keycode == M_E_GRAVE_MAJ
         || keycode == M_E_CIRCONFLEXE_MAJ
         || keycode == M_M_MAJ
+        || keycode == M_A_MAJ
+        || keycode == M_Q_MAJ
       ){
         unregister_code(KC_LSFT);
       }
