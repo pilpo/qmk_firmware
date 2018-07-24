@@ -89,7 +89,7 @@ enum custom_layer {
   SHIFTED
 };
 
-#define KEY_DELAY 200
+#define KEY_DELAY 130
 static uint16_t key_timer;
 
 bool is_mac = false;  // Default to windows operation for extended character code sequences 
@@ -99,6 +99,8 @@ bool is_mac = false;  // Default to windows operation for extended character cod
                       // This character in Unicode is U+00A0
                       // On Ubuntu, type it as Ctrl + Shift + U then 00A0
                       // (cf https://docs.qmk.fm/#/feature_unicode)
+                      // SEND_STRING("€");
+                      // unicode_input_start(); register_hex(0x20AC); unicode_input_finish();
                       
 char *alt_codes[][2] = { // if use on windows & mac & linux, use [][3], 0 for windows, 1 for mac et 2 for linux
     {
@@ -298,14 +300,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------| END  |           |  C   |------+------+------+------+------+--------|
  * | LShift |   Ê  |   À  |   Y  |   X  |   .  |      |           |      |   '  |   M  |   G  |   H  |  ↑   | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |F7    |   Z  | Alt  |   K  |   !  |                                       |  ,   | CTRL |   ←  |  ↓  |   →   |
+ *   |CTRL  |   Z  | Alt  |   K  |   !  |                                       |  ,   | CTRL |   ←  |  ↓  |   →   |
  *   `----------------------------------'                                       `----------------------------------'
- *    todo F7 ctrl+s?                                    ,-------------.       ,-------------.
- *                                        | F4   | F5   |       | WIN  | DEL  |
+ *                                        ,-------------.       ,-------------.
+ *                                        | F8   | F9   |       | WIN  | DEL  |
  *                                 ,------|------|------|       |------+--------+------.
- *                                 |      |      | F6   |       | PgUp |        |      |
- *                                 | SPACE| Undo |------|       |------|  Redo  |SPACE |
- *                                 |      |      | F8   |       | PgDn |        |      |
+ *                                 |      |      | F10  |       | PgUp |        |      |
+ *                                 |SPACE |  F2  |------|       |------|   F5   |SPACE |
+ *                                 |      |      | F11  |       | PgDn |        |      |
  *                                 `--------------------'       `----------------------'
  */
 // If it accepts an argument (i.e, is a function), it doesn't need KC_.
@@ -314,24 +316,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // left hand
 KC_ESCAPE,        M_DOUBLE_QUOTE,         M_CHEVRON_INF,    M_CHEVRON_SUP,    M_PARENTHESE_OUV,   M_PARENTHESE_FERM,    M_TIRET_BAS,
 KC_TAB,           KC_B,                   M_E_AIGUE,        KC_P,             KC_O,               M_E_GRAVE,            KC_HOME,
-TT(LAYER_2),      M_A,                    KC_U,             KC_I,             KC_E,               KC_F,
+TT(LAYER_2),      KC_Q,                    KC_U,             KC_I,             KC_E,               KC_F,
 M(SHIFTED),       M_E_CIRCONFLEXE,        CUT,              COPY,             PAST,               M_POINT,              KC_END,
-KC_F7,         KC_W,                    KC_LALT,          KC_K,             M_PT_EXCLAM,
+KC_RCTL,          KC_W,                    KC_LALT,          KC_K,             M_PT_EXCLAM,
 
-                                                                                                                        KC_F4,  KC_F5,
-                                                                                                                                KC_F6,
-                                                                                                                        KC_SPC,LCTL(KC_W), KC_F8,
+                                                                                                                        KC_F8,  KC_F9,
+                                                                                                                                KC_F10,
+                                                                                                                        KC_SPC, KC_F2, KC_F11,
 
 // right hand
 M_PRCT,           M_AROBASE,              M_PLUS,           M_MOINS,          M_FOIS,             M_EGAL,               TG(LAYER_2),
 KC_V,             KC_D,                   KC_L,             KC_J,             M_W,                M_C_CEDILLE,          KC_BSPACE,
-                  KC_T,                   KC_S,             KC_R,             KC_N,               M_Q,                  KC_ENT,                 
+                  KC_T,                   KC_S,             KC_R,             KC_N,               KC_A,                  KC_ENT,                 
 KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,             KC_H,               KC_UP,                 M(SHIFTED),
                                           M_VIRGULE,        KC_LCTL,            KC_LEFT,            KC_DOWN,             KC_RIGHT,       
 
                                                                                                                         KC_RGUI, KC_DEL,
                                                                                                                         KC_PGUP,
-                                                                                                                        KC_PGDN,LCTL(KC_Y), KC_SPC
+                                                                                                                        KC_PGDN,KC_F5, KC_SPC
     ),
 /* Keymap 1: Shift Layer
  *
@@ -380,7 +382,7 @@ KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,             KC
  * ,---------------------------------------------------.           ,--------------------------------------------------.
  * |         |  F1  |  F2  |  F3  |  F4  |  F5  |      |           |      |  F6  |  F7  |  F8  |  F9  |PrtScr|        |
  * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
- * |         |   |  |      |  &   |  [   |  ]   |  F11 |           |      |      |      |  7   |  8   | 9    |        |
+ * |         | [    |  ]   |  &   |   |  |      |  F11 |           |      |      |      |  7   |  8   | 9    |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |         |      |  ù   |  `   |  €   |      |------|           |------|      |      |  4   |  5   | 6    |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
@@ -399,7 +401,7 @@ KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,             KC
 
 [LAYER_2] = LAYOUT_ergodox(
        KC_TRNS, KC_F1,              KC_F2,        KC_F3,          KC_F4,          KC_F5,          KC_TRNS,
-       KC_TRNS, M_BARRE_VERTICALE,  KC_TRNS,      M_ET_COM,       M_CROCHET_OUV,  M_CROCHET_FERM, KC_F11,
+       KC_TRNS, M_CROCHET_OUV,      M_CROCHET_FERM,M_ET_COM,      M_BARRE_VERTICALE,  KC_TRNS, KC_F11,
        KC_TRNS, KC_TRNS,            M_U_GRAVE,    M_QHOTE_INVERS, M_EURO,         KC_TRNS,
        KC_TRNS, M_SLASH,            M_BACKSLASH,  M_ACCO_OUV,     M_ACCO_FERM,    M_TILD,         KC_F10,
        KC_TRNS, KC_TRNS,            KC_TRNS,      KC_TRNS,        KC_TRNS,
