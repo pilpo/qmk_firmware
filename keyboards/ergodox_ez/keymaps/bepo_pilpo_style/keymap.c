@@ -81,7 +81,8 @@ enum custom_keycodes {
   // FIRST "MACRO"
   CUT,
   COPY,
-  PAST
+  PAST,
+  SAVE
   // LAST "MACRO"
 };
 
@@ -273,7 +274,8 @@ char *alt_codes[][2] = { // if use on windows & mac & linux, use [][3], 0 for wi
 enum enum_combo_code {
   COMBO_CUT,
   COMBO_COPY,
-  COMBO_PAST
+  COMBO_PAST, 
+  COMBO_SAVE 
 };
 
 char *combo_codes[][2] = {
@@ -285,6 +287,9 @@ char *combo_codes[][2] = {
         SS_LALT(SS_TAP(X_RBRACKET))             // mac shortcut for later
     }, {
         SS_LCTRL(SS_TAP(X_V)),                  // PAST
+        SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
+    }, {
+        SS_LCTRL(SS_TAP(X_S)),                  // SAVE
         SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
     }}; 
 
@@ -298,9 +303,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * | TL1    |   A  |   U  |   I  |   E  |   F  |------|           |------|   T  |   S  |   R  |   N  |   Q  | ENTER  |
  * |--------+------+------+------+------+------| END  |           |  ,   |------+------+------+------+------+--------|
- * | LShift |   Ê  |   À  |   Y  |   X  |   .  |      |           |      |   V  |   M  |   G  |   H  |  ↑   | RShift |
+ * | LShift |   Ê  |   À  |   Y  |   X  |   .  |      |           |      |   C  |   M  |   G  |   H  |  ↑   | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |CTRL  |   Z  | Alt  |   K  |   !  |                                       |  C   | CTRL |   ←  |  ↓  |   →   |
+ *   |CTRL  |   Z  | Alt  |   K  |   !  |                                       |   V  | CTRL |   ←  |  ↓  |   →   |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        | F8   | F9   |       | WIN  | DEL  |
@@ -318,7 +323,7 @@ KC_ESCAPE,        M_DOUBLE_QUOTE,         M_CHEVRON_INF,    M_CHEVRON_SUP,    M_
 KC_TAB,           KC_B,                   M_E_AIGUE,        KC_P,             KC_O,               M_E_GRAVE,            KC_HOME,
 TT(LAYER_2),      KC_Q,                   KC_U,             KC_I,             KC_E,               KC_F,
 M(SHIFTED),       M_E_CIRCONFLEXE,        CUT,              COPY,             PAST,               M_POINT,              KC_END,
-KC_RCTL,          KC_W,                   KC_LALT,          KC_K,             M_PT_EXCLAM,
+KC_RCTL,          KC_W,                   KC_LALT,          SAVE,             M_PT_EXCLAM,
 
                                                                                                                         KC_F8,  KC_F9,
                                                                                                                                 KC_F10,
@@ -328,8 +333,8 @@ KC_RCTL,          KC_W,                   KC_LALT,          KC_K,             M_
 M_PRCT,           M_AROBASE,              M_PLUS,           M_MOINS,          M_FOIS,             M_EGAL,               TG(LAYER_2),
 M_SIMPLE_QUOTE,   KC_D,                   KC_L,             KC_J,             M_W,                M_C_CEDILLE,          KC_BSPACE,
                   KC_T,                   KC_S,             KC_R,             KC_N,               KC_A,                 KC_ENT,                 
-M_VIRGULE,        KC_V,                   KC_SCOLON,         KC_G,             KC_H,               KC_UP,                M(SHIFTED),
-                                          KC_C,             KC_LCTL,          KC_LEFT,            KC_DOWN,              KC_RIGHT,       
+M_VIRGULE,        KC_C,                   KC_SCOLON,         KC_G,             KC_H,               KC_UP,                M(SHIFTED),
+                                          KC_V,             KC_LCTL,          KC_LEFT,            KC_DOWN,              KC_RIGHT,       
 
                                                                                                                         KC_RGUI, KC_DEL,
                                                                                                                         KC_PGUP,
@@ -503,6 +508,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           send_string("x"); // if the key is released before KEY_DELAY then we send ...
         }else{ // if the key is released after KEY_DELAY then we send CTRL+c
           send_string(combo_codes[COMBO_PAST][is_mac]);
+        }
+      }
+      return false;
+      break;    
+    case SAVE:
+      if (record->event.pressed) {
+        key_timer = timer_read(); // if the key is being pressed, we start the timer.
+      } else {
+        if (timer_elapsed(key_timer) < KEY_DELAY) { // when the key is being released, we check the timer
+          send_string("k"); // if the key is released before KEY_DELAY then we send ...
+        }else{ // if the key is released after KEY_DELAY then we send CTRL+c
+          send_string(combo_codes[COMBO_SAVE][is_mac]);
         }
       }
       return false;
