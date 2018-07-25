@@ -306,7 +306,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                        | F8   | F9   |       | WIN  | DEL  |
  *                                 ,------|------|------|       |------+--------+------.
  *                                 |      |      | F10  |       | PgUp |        |      |
- *                                 |SPACE |  F2  |------|       |------|   F5   |SPACE |
+ *                                 |SPACE |  F5  |------|       |------|   F2   |SPACE |
  *                                 |      |      | F11  |       | PgDn |        |      |
  *                                 `--------------------'       `----------------------'
  */
@@ -322,31 +322,31 @@ KC_RCTL,          KC_W,                   KC_LALT,          KC_K,             M_
 
                                                                                                                         KC_F8,  KC_F9,
                                                                                                                                 KC_F10,
-                                                                                                                        KC_SPC, KC_F2, KC_F11,
+                                                                                                                        KC_SPC, KC_F5, KC_F11,
 
 // right hand
 M_PRCT,           M_AROBASE,              M_PLUS,           M_MOINS,          M_FOIS,             M_EGAL,               TG(LAYER_2),
 M_SIMPLE_QUOTE,   KC_D,                   KC_L,             KC_J,             M_W,                M_C_CEDILLE,          KC_BSPACE,
                   KC_T,                   KC_S,             KC_R,             KC_N,               KC_A,                 KC_ENT,                 
-M_VIRGULE,        KC_V,                   M_M,              KC_G,             KC_H,               KC_UP,                M(SHIFTED),
+M_VIRGULE,        KC_V,                   KC_SCOLON,         KC_G,             KC_H,               KC_UP,                M(SHIFTED),
                                           KC_C,             KC_LCTL,          KC_LEFT,            KC_DOWN,              KC_RIGHT,       
 
                                                                                                                         KC_RGUI, KC_DEL,
                                                                                                                         KC_PGUP,
-                                                                                                                        KC_PGDN,KC_F5, KC_SPC
+                                                                                                                        KC_PGDN,KC_F2, KC_SPC
     ),
 /* Keymap 1: Shift Layer
  *
  * ,---------------------------------------------------.           ,--------------------------------------------------.
  * |         |  1   |  2   |  3   |  4   |  5   |  #   |           |  ^   | 6    |  7   | 8    | 9    | 0    |        |
  * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
- * |         |      |  É   |      |      |  È   |      |           |  ?   |      |      |      | W    | Ç    |        |
+ * |         |      |  É   |      |      |  È   |      |           |  ?   |      |      |      |      | Ç    |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |         |      |      |      |      |      |------|           |------|      |      |      |      |      |        |
  * |---------+------+------+------+------+------|      |           |  ;   |------+------+------+------+------+--------|
  * |         |  Ê   |  À   |      |      | :    |      |           |      |     |      |      |      |       |        |
  * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |       |  Z   |      |      | $    |                                       |     |      |      |      |      |
+ *   |       |      |      |      | $    |                                       |     |      |      |      |      |
  *   `-----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        |      |      |       |      |       |
@@ -361,9 +361,9 @@ M_VIRGULE,        KC_V,                   M_M,              KC_G,             KC
        // left hand
        KC_TRNS, KC_1,     KC_2,   KC_3,     KC_4,   KC_5,         M_DIESE,
        KC_TRNS, KC_TRNS, M_E_AIGUE_MAJ, KC_TRNS, KC_TRNS, M_E_GRAVE_MAJ,      KC_TRNS,
-       KC_TRNS, M_A_MAJ, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, M_E_CIRCONFLEXE_MAJ, M_A_GRAVE_MAJ, KC_TRNS, KC_TRNS, M_DOUBLE_PT,  KC_TRNS,
-       KC_TRNS, M_Z_MAJ, KC_TRNS, KC_TRNS, M_DOLLAR,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_DOLLAR,
                                            KC_TRNS, KC_TRNS,
                                                     KC_TRNS,
                                   KC_TRNS, KC_TRNS, KC_TRNS,
@@ -371,7 +371,7 @@ M_VIRGULE,        KC_V,                   M_M,              KC_G,             KC
        M_ACCENT_CIRCONF,  KC_6, KC_7, KC_8, KC_9, KC_0, KC_TRNS,
        M_PT_INTERROG,  KC_TRNS, KC_TRNS, KC_TRNS, M_W_MAJ, M_C_CEDILLE_MAJ, KC_TRNS,
                  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_Q_MAJ, KC_TRNS,
-       M_PT_VIRGULE,  KC_TRNS, M_M_MAJ, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       M_PT_VIRGULE,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS,
        KC_TRNS,
