@@ -294,13 +294,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * | Esc    |   "  |   <  |   >  |   (  |   )  | _    |           | %    |   @  |   +  |   -  |   *  |   =  |  TL1   |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | TAB    |   B  |   É  |   P  |   O  |   È  | HOME |           |  V   |   D  |   L  |   J  |   W  |   Ç  | BCKSPC |
+ * | TAB    |   B  |   É  |   P  |   O  |   È  | HOME |           |  '   |   D  |   L  |   J  |   W  |   Ç  | BCKSPC |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * | TL1    |   A  |   U  |   I  |   E  |   F  |------|           |------|   T  |   S  |   R  |   N  |   Q  | ENTER  |
- * |--------+------+------+------+------+------| END  |           |  C   |------+------+------+------+------+--------|
- * | LShift |   Ê  |   À  |   Y  |   X  |   .  |      |           |      |   '  |   M  |   G  |   H  |  ↑   | RShift |
+ * |--------+------+------+------+------+------| END  |           |  ,   |------+------+------+------+------+--------|
+ * | LShift |   Ê  |   À  |   Y  |   X  |   .  |      |           |      |   V  |   M  |   G  |   H  |  ↑   | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |CTRL  |   Z  | Alt  |   K  |   !  |                                       |  ,   | CTRL |   ←  |  ↓  |   →   |
+ *   |CTRL  |   Z  | Alt  |   K  |   !  |                                       |  C   | CTRL |   ←  |  ↓  |   →   |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        | F8   | F9   |       | WIN  | DEL  |
@@ -316,9 +316,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // left hand
 KC_ESCAPE,        M_DOUBLE_QUOTE,         M_CHEVRON_INF,    M_CHEVRON_SUP,    M_PARENTHESE_OUV,   M_PARENTHESE_FERM,    M_TIRET_BAS,
 KC_TAB,           KC_B,                   M_E_AIGUE,        KC_P,             KC_O,               M_E_GRAVE,            KC_HOME,
-TT(LAYER_2),      KC_Q,                    KC_U,             KC_I,             KC_E,               KC_F,
+TT(LAYER_2),      KC_Q,                   KC_U,             KC_I,             KC_E,               KC_F,
 M(SHIFTED),       M_E_CIRCONFLEXE,        CUT,              COPY,             PAST,               M_POINT,              KC_END,
-KC_RCTL,          KC_W,                    KC_LALT,          KC_K,             M_PT_EXCLAM,
+KC_RCTL,          KC_W,                   KC_LALT,          KC_K,             M_PT_EXCLAM,
 
                                                                                                                         KC_F8,  KC_F9,
                                                                                                                                 KC_F10,
@@ -326,10 +326,10 @@ KC_RCTL,          KC_W,                    KC_LALT,          KC_K,             M
 
 // right hand
 M_PRCT,           M_AROBASE,              M_PLUS,           M_MOINS,          M_FOIS,             M_EGAL,               TG(LAYER_2),
-KC_V,             KC_D,                   KC_L,             KC_J,             M_W,                M_C_CEDILLE,          KC_BSPACE,
-                  KC_T,                   KC_S,             KC_R,             KC_N,               KC_A,                  KC_ENT,                 
-KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,             KC_H,               KC_UP,                 M(SHIFTED),
-                                          M_VIRGULE,        KC_LCTL,            KC_LEFT,            KC_DOWN,             KC_RIGHT,       
+M_SIMPLE_QUOTE,   KC_D,                   KC_L,             KC_J,             M_W,                M_C_CEDILLE,          KC_BSPACE,
+                  KC_T,                   KC_S,             KC_R,             KC_N,               KC_A,                 KC_ENT,                 
+M_VIRGULE,        KC_V,                   M_M,              KC_G,             KC_H,               KC_UP,                M(SHIFTED),
+                                          KC_C,             KC_LCTL,          KC_LEFT,            KC_DOWN,              KC_RIGHT,       
 
                                                                                                                         KC_RGUI, KC_DEL,
                                                                                                                         KC_PGUP,
@@ -340,13 +340,13 @@ KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,             KC
  * ,---------------------------------------------------.           ,--------------------------------------------------.
  * |         |  1   |  2   |  3   |  4   |  5   |  #   |           |  ^   | 6    |  7   | 8    | 9    | 0    |        |
  * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
- * |         |      |  É   |      |      |  È   |      |           |      |      |      |      | W    | Ç    |        |
+ * |         |      |  É   |      |      |  È   |      |           |  ?   |      |      |      | W    | Ç    |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |         |      |      |      |      |      |------|           |------|      |      |      |      |      |        |
- * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |  Ê   |  À   |      |      | :    |      |           |      | ?    |      |      |      |      |        |
+ * |---------+------+------+------+------+------|      |           |  ;   |------+------+------+------+------+--------|
+ * |         |  Ê   |  À   |      |      | :    |      |           |      |     |      |      |      |       |        |
  * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |       |  Z   |      |      | $    |                                       |  ;   |      |      |      |      |
+ *   |       |  Z   |      |      | $    |                                       |     |      |      |      |      |
  *   `-----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        |      |      |       |      |       |
@@ -369,10 +369,10 @@ KC_C,             M_SIMPLE_QUOTE,         M_M,              KC_G,             KC
                                   KC_TRNS, KC_TRNS, KC_TRNS,
     // right hand
        M_ACCENT_CIRCONF,  KC_6, KC_7, KC_8, KC_9, KC_0, KC_TRNS,
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, M_W_MAJ, M_C_CEDILLE_MAJ, KC_TRNS,
+       M_PT_INTERROG,  KC_TRNS, KC_TRNS, KC_TRNS, M_W_MAJ, M_C_CEDILLE_MAJ, KC_TRNS,
                  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_Q_MAJ, KC_TRNS,
-       KC_TRNS,  M_PT_INTERROG, M_M_MAJ, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-                          M_PT_VIRGULE, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       M_PT_VIRGULE,  KC_TRNS, M_M_MAJ, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS,
        KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS
