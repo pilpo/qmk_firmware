@@ -1,8 +1,9 @@
 #include QMK_KEYBOARD_H
-#include "debug.h"
+//#include "debug.h"
 #include "action_layer.h"
 #include "version.h"
 #include "action_tapping.h"
+#include "keymap_extras/keymap_bepo.h"
 
 #define BASE 0 // default layer
 #define SHIFT 1 // shift layer 
@@ -82,7 +83,9 @@ enum custom_keycodes {
   CUT,
   COPY,
   PAST,
-  SAVE
+  SAVE,
+  UNDO,
+  REFRESH_CACHE
   // LAST "MACRO"
 };
 
@@ -192,7 +195,7 @@ char *alt_codes[][2] = { // if use on windows & mac & linux, use [][3], 0 for wi
         SS_LALT(SS_TAP(X_KP_9)SS_TAP(X_KP_4)),                              // ALT+94 ^
         SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
     }, {
-        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_6)SS_TAP(X_KP_3)),                // ALT+163 ú
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_5)SS_TAP(X_KP_1)),                // ALT+151 ù
         SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
     }, {
         SS_LALT(SS_TAP(X_KP_9)SS_TAP(X_KP_6)),                              // ALT+96 `
@@ -275,7 +278,9 @@ enum enum_combo_code {
   COMBO_CUT,
   COMBO_COPY,
   COMBO_PAST, 
-  COMBO_SAVE 
+  COMBO_SAVE,
+  COMBO_UNDO,
+  COMBO_REFRESH_CACHE
 };
 
 char *combo_codes[][2] = {
@@ -291,43 +296,49 @@ char *combo_codes[][2] = {
     }, {
         SS_LCTRL(SS_TAP(X_S)),                  // SAVE
         SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
+    }, {
+        SS_LCTRL(SS_TAP(X_W)),                  // UNDO
+        SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
+    }, {
+        SS_LCTRL(SS_TAP(X_F5)),                  // REFRESH_CACHE
+        SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
     }}; 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  
+[BASE] = LAYOUT_ergodox(  // layer 0 : default
 /* Keymap 0: Basic layer
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * | Esc    |   "  |   <  |   >  |   (  |   )  | _    |           | %    |   @  |   +  |   -  |   *  |   =  |  TL1   |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | TAB    |   B  |   É  |   P  |   O  |   È  | HOME |           |  '   |   D  |   L  |   J  |   W  |   Ç  | BCKSPC |
+ * | TAB    |   B  |  É   |  I   |  O   |  P   |  !   |           |  '   |   D  |   L  |   J  |   W  |   Ç  | BCKSPC |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | TL1    |   A  |   U  |   I  |   E  |   F  |------|           |------|   T  |   S  |   R  |   N  |   Q  | ENTER  |
- * |--------+------+------+------+------+------| END  |           |  ,   |------+------+------+------+------+--------|
+ * | TL1    |   È  |  U   |  A   |  E   |  F   |------|           |------|   T  |   S  |   R  |   N  |   Q  | ENTER  |
+ * |--------+------+------+------+------+------|  ;   |           |  ,   |------+------+------+------+------+--------|
  * | LShift |   Ê  |   À  |   Y  |   X  |   .  |      |           |      |   C  |   M  |   G  |   H  |  ↑   | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |CTRL  |   Z  | Alt  |   K  |   !  |                                       |   V  | CTRL |   ←  |  ↓  |   →   |
+ *   |CTRL  | UNDO | Alt  |   K  |   Z  |                                       |   V  | CTRL |   ←  |  ↓  |   →   |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        | F8   | F9   |       | WIN  | DEL  |
  *                                 ,------|------|------|       |------+--------+------.
- *                                 |      |      | F10  |       | PgUp |        |      |
+ *                                 | LT(  |      | F10  |       | PgUp |        |      |
  *                                 |SPACE |  F5  |------|       |------|   F2   |SPACE |
- *                                 |      |      | F11  |       | PgDn |        |      |
+ *                                 | ,L1) |      | F11  |       | PgDn |        |      |
  *                                 `--------------------'       `----------------------'
  */
 // If it accepts an argument (i.e, is a function), it doesn't need KC_.
 // Otherwise, it needs KC_*
-[BASE] = LAYOUT_ergodox(  // layer 0 : default
 // left hand
 KC_ESCAPE,        M_DOUBLE_QUOTE,         M_CHEVRON_INF,    M_CHEVRON_SUP,    M_PARENTHESE_OUV,   M_PARENTHESE_FERM,    M_TIRET_BAS,
-KC_TAB,           KC_B,                   M_E_AIGUE,        KC_P,             KC_O,               M_E_GRAVE,            KC_HOME,
-TT(LAYER_2),      KC_Q,                   KC_U,             KC_I,             KC_E,               KC_F,
-M(SHIFTED),       M_E_CIRCONFLEXE,        CUT,              COPY,             PAST,               M_POINT,              KC_END,
-KC_RCTL,          KC_W,                   KC_LALT,          SAVE,             M_PT_EXCLAM,
+KC_TAB,           KC_B,                   M_E_AIGUE,        KC_I,             KC_O,               KC_P,                 M_PT_EXCLAM,
+TT(LAYER_2),      M_E_GRAVE,              KC_U,             KC_Q,             KC_E,               KC_F,
+M(SHIFTED),       M_E_CIRCONFLEXE,        CUT,              COPY,             PAST,               M_POINT,              M_PT_VIRGULE,
+KC_RCTL,          LCTL(KC_W),             KC_LALT,          SAVE,             KC_W,
 
-                                                                                                                        KC_F8,  KC_F9,
-                                                                                                                                KC_F10,
-                                                                                                                        KC_SPC, KC_F5, KC_F11,
+                                                                                                                        KC_F8,                             KC_F9,
+                                                                                                                                                           KC_F10,
+                                                                                                                        LT(LAYER_2,KC_SPC), REFRESH_CACHE, KC_F11,
 
 // right hand
 M_PRCT,           M_AROBASE,              M_PLUS,           M_MOINS,          M_FOIS,             M_EGAL,               TG(LAYER_2),
@@ -345,11 +356,11 @@ M_VIRGULE,        KC_C,                   KC_SCOLON,         KC_G,             K
  * ,---------------------------------------------------.           ,--------------------------------------------------.
  * |         |  1   |  2   |  3   |  4   |  5   |  #   |           |  ^   | 6    |  7   | 8    | 9    | 0    |        |
  * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
- * |         |      |  É   |      |      |  È   |      |           |  ?   |      |      |      |      | Ç    |        |
+ * |         |  Ê   |  É   |      |      |  È   |      |           |  ?   |      |      |      |      | Ç    |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |         |      |      |      |      |      |------|           |------|      |      |      |      |      |        |
  * |---------+------+------+------+------+------|      |           |  ;   |------+------+------+------+------+--------|
- * |         |  Ê   |  À   |      |      | :    |      |           |      |     |      |      |      |       |        |
+ * |         |      |  À   |      |      | :    |      |           |      |     |      |      |      |       |        |
  * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
  *   |       |      |      |      | $    |                                       |     |      |      |      |      |
  *   `-----------------------------------'                                       `----------------------------------'
@@ -365,9 +376,9 @@ M_VIRGULE,        KC_C,                   KC_SCOLON,         KC_G,             K
 [SHIFT] = LAYOUT_ergodox(
        // left hand
        KC_TRNS, KC_1,     KC_2,   KC_3,     KC_4,   KC_5,         M_DIESE,
-       KC_TRNS, KC_TRNS, M_E_AIGUE_MAJ, KC_TRNS, KC_TRNS, M_E_GRAVE_MAJ,      KC_TRNS,
+       KC_TRNS, M_E_CIRCONFLEXE_MAJ, M_E_AIGUE_MAJ, KC_TRNS, KC_TRNS, M_E_GRAVE_MAJ,      KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, M_E_CIRCONFLEXE_MAJ, M_A_GRAVE_MAJ, KC_TRNS, KC_TRNS, M_DOUBLE_PT,  KC_TRNS,
+       KC_TRNS, KC_TRNS, M_A_GRAVE_MAJ, KC_TRNS, KC_TRNS, M_DOUBLE_PT,  KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_DOLLAR,
                                            KC_TRNS, KC_TRNS,
                                                     KC_TRNS,
@@ -376,7 +387,7 @@ M_VIRGULE,        KC_C,                   KC_SCOLON,         KC_G,             K
        M_ACCENT_CIRCONF,  KC_6, KC_7, KC_8, KC_9, KC_0, KC_TRNS,
        M_PT_INTERROG,  KC_TRNS, KC_TRNS, KC_TRNS, M_W_MAJ, M_C_CEDILLE_MAJ, KC_TRNS,
                  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_Q_MAJ, KC_TRNS,
-       M_PT_VIRGULE,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS,
        KC_TRNS,
@@ -387,13 +398,13 @@ M_VIRGULE,        KC_C,                   KC_SCOLON,         KC_G,             K
  * ,---------------------------------------------------.           ,--------------------------------------------------.
  * |         |  F1  |  F2  |  F3  |  F4  |  F5  |      |           |      |  F6  |  F7  |  F8  |  F9  |PrtScr|        |
  * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
- * |         | [    |  ]   |  &   |   |  |      |  F11 |           |      |      |      |  7   |  8   | 9    |        |
+ * |         |      |      |  &   |   |  |  €   | HOME |           |      |      |      |  7   |  8   | 9    |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |      |  ù   |  `   |  €   |      |------|           |------|      |      |  4   |  5   | 6    |        |
- * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |  /   |  \   |  {   |  }   |  ~   |  F10 |           |      |  F12 |      |  1   |  2   | 3    |        |
+ * |         |   /  |  ù   |  `   |  [   |  ]   |------|           |------|      |      |  4   |  5   | 6    |        |
+ * |---------+------+------+------+------+------|  END |           |      |------+------+------+------+------+--------|
+ * |         |      |  \   |  {   |  }   |  ~   |      |           |      |  F12 |      |  1   |  2   | 3    |        |
  * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |       |      |      |      |      |                                       |      |  0   |      |      |      |
+ *   |       |      |      |      |  $   |                                       |      |  0   |      |      |      |
  *   `-----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        |      |      |       |      |       |
@@ -405,11 +416,11 @@ M_VIRGULE,        KC_C,                   KC_SCOLON,         KC_G,             K
  */
 
 [LAYER_2] = LAYOUT_ergodox(
-       KC_TRNS, KC_F1,              KC_F2,        KC_F3,          KC_F4,          KC_F5,          KC_TRNS,
-       KC_TRNS, M_CROCHET_OUV,      M_CROCHET_FERM,M_ET_COM,      M_BARRE_VERTICALE,  KC_TRNS, KC_F11,
-       KC_TRNS, KC_TRNS,            M_U_GRAVE,    M_QHOTE_INVERS, M_EURO,         KC_TRNS,
-       KC_TRNS, M_SLASH,            M_BACKSLASH,  M_ACCO_OUV,     M_ACCO_FERM,    M_TILD,         KC_F10,
-       KC_TRNS, KC_TRNS,            KC_TRNS,      KC_TRNS,        KC_TRNS,
+       KC_TRNS, KC_F1,              KC_F2,          KC_F3,          KC_F4,              KC_F5,          KC_TRNS,
+       KC_TRNS, KC_TRNS,            KC_TRNS,        M_ET_COM,       M_BARRE_VERTICALE,  M_EURO,         KC_HOME,
+       KC_TRNS, M_SLASH,            M_U_GRAVE,      M_QHOTE_INVERS, M_CROCHET_OUV,      M_CROCHET_FERM,
+       KC_TRNS, KC_TRNS,            M_BACKSLASH,    M_ACCO_OUV,     M_ACCO_FERM,        M_TILD,         KC_END,
+       KC_TRNS, KC_TRNS,            KC_TRNS,        KC_TRNS,        M_DOLLAR,
                                            KC_TRNS, KC_TRNS,
                                                     KC_TRNS,
                                   KC_TRNS, KC_TRNS, KC_TRNS,
@@ -520,6 +531,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           send_string("k"); // if the key is released before KEY_DELAY then we send ...
         }else{ // if the key is released after KEY_DELAY then we send CTRL+c
           send_string(combo_codes[COMBO_SAVE][is_mac]);
+        }
+      }
+      return false;
+      break;    
+    case REFRESH_CACHE:
+      if (record->event.pressed) {
+        key_timer = timer_read(); // if the key is being pressed, we start the timer.
+      } else {
+        if (timer_elapsed(key_timer) < KEY_DELAY) { // when the key is being released, we check the timer
+          register_code(KC_F5); // if the key is released before KEY_DELAY then we send ...
+        }else{ // if the key is released after KEY_DELAY then we send CTRL+c
+          send_string(combo_codes[COMBO_REFRESH_CACHE][is_mac]);
         }
       }
       return false;
