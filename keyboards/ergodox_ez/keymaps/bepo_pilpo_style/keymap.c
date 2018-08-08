@@ -336,9 +336,9 @@ TT(LAYER_2),      M_E_GRAVE,              KC_U,             KC_Q,             KC
 M(SHIFTED),       M_E_CIRCONFLEXE,        CUT,              COPY,             PAST,               M_POINT,              M_PT_VIRGULE,
 KC_RCTL,          LCTL(KC_W),             KC_LALT,          SAVE,             KC_W,
 
-                                                                                                                        KC_F8,                             KC_F9,
-                                                                                                                                                           KC_F10,
-                                                                                                                        LT(LAYER_2,KC_SPC), REFRESH_CACHE, KC_F11,
+                                                                                                                        KC_F8,                      KC_F9,
+                                                                                                                                                    KC_F10,
+                                                                                                                        LT(LAYER_2,KC_SPC), KC_F5,  KC_F11,
 
 // right hand
 M_PRCT,           M_AROBASE,              M_PLUS,           M_MOINS,          M_FOIS,             M_EGAL,               TG(LAYER_2),
@@ -356,11 +356,11 @@ M_VIRGULE,        KC_C,                   KC_SCOLON,         KC_G,             K
  * ,---------------------------------------------------.           ,--------------------------------------------------.
  * |         |  1   |  2   |  3   |  4   |  5   |  #   |           |  ^   | 6    |  7   | 8    | 9    | 0    |        |
  * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
- * |         |  Ê   |  É   |      |      |  È   |      |           |  ?   |      |      |      |      | Ç    |        |
+ * |         |      |  É   |      |      |      |      |           |  ?   |      |      |      |      | Ç    |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |      |      |      |      |      |------|           |------|      |      |      |      |      |        |
- * |---------+------+------+------+------+------|      |           |  ;   |------+------+------+------+------+--------|
- * |         |      |  À   |      |      | :    |      |           |      |     |      |      |      |       |        |
+ * |         |  È   |      |      |      |      |------|           |------|      |      |      |      |      |        |
+ * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |         |  Ê   |  À   |      |      | :    |      |           |      |     |      |      |      |       |        |
  * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
  *   |       |      |      |      | $    |                                       |     |      |      |      |      |
  *   `-----------------------------------'                                       `----------------------------------'
@@ -375,11 +375,11 @@ M_VIRGULE,        KC_C,                   KC_SCOLON,         KC_G,             K
 // Keymap 1: SHIFT Layer-1
 [SHIFT] = LAYOUT_ergodox(
        // left hand
-       KC_TRNS, KC_1,     KC_2,   KC_3,     KC_4,   KC_5,         M_DIESE,
-       KC_TRNS, M_E_CIRCONFLEXE_MAJ, M_E_AIGUE_MAJ, KC_TRNS, KC_TRNS, M_E_GRAVE_MAJ,      KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_TRNS, M_A_GRAVE_MAJ, KC_TRNS, KC_TRNS, M_DOUBLE_PT,  KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, M_DOLLAR,
+       KC_TRNS, KC_1,                 KC_2,   KC_3,     KC_4,   KC_5,         M_DIESE,
+       KC_TRNS, KC_TRNS,              M_E_AIGUE_MAJ, KC_TRNS, KC_TRNS, KC_TRNS,      KC_TRNS,
+       KC_TRNS, M_E_GRAVE_MAJ,        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, M_E_CIRCONFLEXE_MAJ,  M_A_GRAVE_MAJ, KC_TRNS, KC_TRNS, M_DOUBLE_PT,  KC_TRNS,
+       KC_TRNS, KC_TRNS,              KC_TRNS, KC_TRNS, M_DOLLAR,
                                            KC_TRNS, KC_TRNS,
                                                     KC_TRNS,
                                   KC_TRNS, KC_TRNS, KC_TRNS,
@@ -400,9 +400,9 @@ M_VIRGULE,        KC_C,                   KC_SCOLON,         KC_G,             K
  * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
  * |         |      |      |  &   |   |  |  €   | HOME |           |      |      |      |  7   |  8   | 9    |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |   /  |  ù   |  `   |  [   |  ]   |------|           |------|      |      |  4   |  5   | 6    |        |
+ * |         |   ~  |  ù   |  `   |  [   |  ]   |------|           |------|      |      |  4   |  5   | 6    |        |
  * |---------+------+------+------+------+------|  END |           |      |------+------+------+------+------+--------|
- * |         |      |  \   |  {   |  }   |  ~   |      |           |      |  F12 |      |  1   |  2   | 3    |        |
+ * |         |      |  \   |  {   |  }   |  /   |      |           |      |  F12 |      |  1   |  2   | 3    |        |
  * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
  *   |       |      |      |      |  $   |                                       |      |  0   |      |      |      |
  *   `-----------------------------------'                                       `----------------------------------'
@@ -418,8 +418,8 @@ M_VIRGULE,        KC_C,                   KC_SCOLON,         KC_G,             K
 [LAYER_2] = LAYOUT_ergodox(
        KC_TRNS, KC_F1,              KC_F2,          KC_F3,          KC_F4,              KC_F5,          KC_TRNS,
        KC_TRNS, KC_TRNS,            KC_TRNS,        M_ET_COM,       M_BARRE_VERTICALE,  M_EURO,         KC_HOME,
-       KC_TRNS, M_SLASH,            M_U_GRAVE,      M_QHOTE_INVERS, M_CROCHET_OUV,      M_CROCHET_FERM,
-       KC_TRNS, KC_TRNS,            M_BACKSLASH,    M_ACCO_OUV,     M_ACCO_FERM,        M_TILD,         KC_END,
+       KC_TRNS, M_TILD,             M_U_GRAVE,      M_QHOTE_INVERS, M_CROCHET_OUV,      M_CROCHET_FERM,
+       KC_TRNS, KC_TRNS,            M_BACKSLASH,    M_ACCO_OUV,     M_ACCO_FERM,        M_SLASH,         KC_END,
        KC_TRNS, KC_TRNS,            KC_TRNS,        KC_TRNS,        M_DOLLAR,
                                            KC_TRNS, KC_TRNS,
                                                     KC_TRNS,
