@@ -3,12 +3,11 @@
 #include "action_layer.h"
 #include "version.h"
 #include "action_tapping.h"
-//#include "keymap_extras/keymap_bepo.h"
 #include "keymap_extras/keymap_french.h"
 
 #define BASE 0 // default layer
-#define SHIFT 1 // shift layer 
-#define LAYER_2 2 // "first" true layer 
+#define SHIFT 1 
+#define LAYER_2 2 
 #define TAPPING_TOGGLE 1
 #define M_1        LSFT(KC_1)
 #define M_2        LSFT(KC_2)
@@ -76,61 +75,62 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [BASE] = LAYOUT_ergodox(  // layer 0 : default
 /* Keymap 0: Basic layer
  * ,--------------------------------------------------.           ,--------------------------------------------------.
- * | Esc    |   &  |   é  |   "  |   '  |   (  |      |           |      |   -  |   è  |   _  |   ç  |   à  |  TL2   |
+ * | Esc    |   &  |   é  |   "  |   '  |   (  |  ù   |           |  =   |   -  |   è  |   _  |   ç  |   à  |  TL2   |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | TAB    |   A  |  Z   |  E   |  R   |  T   |  !   |           |  ^   |   Y  |   U  |   I  |   O  |   P  | BCKSPC |
+ * | TAB    |   A  |  Z   |  E   |  R   |  T   |      |           |  *   |   Y  |   U  |   I  |   O  |   P  | BCKSPC |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |CAPSLOCK|   Q  |  S   |  D   |  F   |  G   |------|           |------|   H  |   J  |   K  |   L  |   M  | ENTER  |
- * |--------+------+------+------+------+------|  ;   |           |  .   |------+------+------+------+------+--------|
- * | LShift |   W  |   X  |   C  |   V  |  B   |      |           |      |   B  |   N  |   ,  |   :  |  ↑   | RShift |
+ * |--------+------+------+------+------+------|      |           |  ,   |------+------+------+------+------+--------|
+ * | LShift |   W  |   X  |   C  |   V  |  B   |      |           |      |   B  |   N  |   .  |   :  |  ↑   | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |CTRL  | UNDO | Alt  |      |      |                                       |AltGR | CTRL |   ←  |  ↓  |   →   |
+ *   |CTRL  | UNDO | Alt  |  <   |   >  |                                       |AltGR | CTRL |   ←  |  ↓  |   →   |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        | F8   | F9   |       | WIN  | DEL  |
  *                                 ,------|------|------|       |------+--------+------.
  *                                 | LT(  |      | F10  |       | PgUp |        | LT(  |
  *                                 |SPACE |  F5  |------|       |------|   F2   |SPACE |
- *                                 | ,L1) |      | F11  |       | PgDn |        | ,L1) |
+ *                                 | ,L2) |      | F11  |       | PgDn |        | ,L2) |
  *                                 `--------------------'       `----------------------'
- */               
+ */  //KC_RCTL             
 // If it accepts an argument (i.e, is a function), it doesn't need KC_.
 // Otherwise, it needs KC_*
 // KC_COMM/*;.*/
 // left hand
-KC_ESCAPE,        KC_1,                   KC_2,             KC_3,             KC_4,               KC_5,                 KC_TRNS,        
-KC_TAB,           KC_Q,                   KC_W,             KC_E,             KC_R,               KC_T,                 KC_SLSH,        
-TT(LAYER_2),      KC_A,                   KC_S,             KC_D,             KC_F,               KC_G,
-KC_LSHIFT,       KC_Z,                   KC_X,             KC_C,             KC_V,               KC_B,                 KC_COMM,        
-KC_RCTL,          LCTL(KC_W),             KC_LALT,          SAVE,             KC_W,
+KC_ESCAPE,             KC_1,                   KC_2,             KC_3,             KC_4,               KC_5,                 FR_UGRV,        
+KC_TAB,                KC_Q,                   KC_W,             KC_E,             KC_R,               KC_T,                 KC_TRNS,        
+KC_CAPSLOCK,           KC_A,                   SAVE,             KC_D,             KC_F,               KC_G,
+KC_LSHIFT,             KC_Z,                   CUT,              COPY,             PAST,               KC_B,                 KC_TRNS,        
+//LCTL_T(LCTL(KC_SPC))
+KC_LCTL,  LCTL(KC_W),             KC_LALT,          FR_LESS,          FR_GRTR,
 
                                                                                                                         KC_F8,                      KC_F9,
                                                                                                                                                     KC_F10,
-                                                                                                                        LT(LAYER_1,KC_SPC), KC_F5,  KC_F11,
+                                                                                                                        LT(LAYER_2,KC_SPC), REFRESH_CACHE,  KC_F11,
 
 // right hand
-KC_TRNS,          KC_6,                   KC_7,             KC_8,             KC_9,               KC_0,                 TG(LAYER_2),
-KC_LBRC,          KC_Y,                   KC_U,             KC_I,             KC_O,               KC_P,                 KC_BSPACE,
+FR_EQL,          KC_6,                   KC_7,             KC_8,             KC_9,               KC_0,                 TG(LAYER_2),
+FR_ASTR,          KC_Y,                   KC_U,             KC_I,             KC_O,               KC_P,                 KC_BSPACE,
                   KC_H,                   KC_J,             KC_K,             KC_L,               KC_SCLN,              KC_ENT,                 
-LSFT(FR_SCLN),    KC_B,                   KC_N,             KC_M/*,?*/,       KC_DOT/*:/*/,       KC_UP,                KC_RSHIFT,
+FR_COLN,          KC_B,                   KC_N,             FR_DOT,           KC_DOT/*:/*/,       KC_UP,                KC_RSHIFT,
                                           KC_RALT,          KC_LCTL,          KC_LEFT,            KC_DOWN,              KC_RIGHT,       
 
                                                                                                                         KC_RGUI, KC_DEL,
                                                                                                                         KC_PGUP,
-                                                                                                                        KC_PGDN,KC_F2, LT(LAYER_1,KC_SPC)
+                                                                                                                        KC_PGDN,KC_F2, LT(LAYER_2,KC_SPC)
     ),
 /* Keymap 1: Shift Layer
  *
  * ,---------------------------------------------------.           ,--------------------------------------------------.
- * |         |  F1  |  F2  |  F3  |  F4  |  F5  |      |           |  ^   | 6    |  7   | 8    | 9    | 0    |        |
+ * |         |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
  * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
- * |         |      |      |  &   |   |  |  €   | HOME |           |  ?   |      |      |      |      | Ç    |        |
+ * |         |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |   ~  |  ù   |  `   |  [   |  ]   |------|           |------|      |      |      |      |      |        |
- * |---------+------+------+------+------+------|  END |           |      |------+------+------+------+------+--------|
- * |         |      |  \   |  {   |  }   |  /   |      |           |      |     |   ?  |   .  |   /  |       |        |
+ * |         |      |      |      |      |      |------|           |------|      |      |      |      |      |        |
+ * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |         |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
  * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |       |      |      |      |  $   |                                       |     |      |      |      |      |
+ *   |       |      |      |      |      |                                       |     |      |      |      |      |
  *   `-----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        |      |      |       |      |       |
@@ -166,13 +166,13 @@ LSFT(FR_SCLN),    KC_B,                   KC_N,             KC_M/*,?*/,       KC
  * ,---------------------------------------------------.           ,--------------------------------------------------.
  * |         |  F1  |  F2  |  F3  |  F4  |  F5  |      |           |      |  F6  |  F7  |  F8  |  F9  |PrtScr|        |
  * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
- * |         |      |      |      |      |      | HOME |           |      |      |      |  7   |  8   | 9    |        |
+ * |         |      |      |      |      |  \   | HOME |           |      |  °   |   ^  |  7   |  8   | 9    |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |   ~  |  ù   |  `   |  [   |  ]   |------|           |------|      |      |  4   |  5   | 6    |        |
+ * |         |      |  ~   |  `   |  [   |  ]   |------|           |------|  ¨   |   $  |  4   |  5   | 6    |        |
  * |---------+------+------+------+------+------|  END |           |      |------+------+------+------+------+--------|
- * |         |      |  \   |  {   |  }   |  /   |      |           |      |  F12 |      |  1   |  2   | 3    |        |
+ * |         |      |      |  {   |  }   |  |   |      |           |      |  =   |   +  |  1   |  2   | 3    |        |
  * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |       |      |      |      |  $   |                                       |      |  0   |  .   |      |      |
+ *   |       |      |      |  &   |  $   |                                       |   ?  |  0   |  .   | !    |      |
  *   `-----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        |      |      |       |      |       |
@@ -185,19 +185,19 @@ LSFT(FR_SCLN),    KC_B,                   KC_N,             KC_M/*,?*/,       KC
 
 [LAYER_2] = LAYOUT_ergodox(
        KC_TRNS, KC_F1,              KC_F2,     KC_F3,  KC_F4,    KC_F5,   KC_TRNS,
-       KC_TRNS, KC_TRNS,            KC_TRNS,   KC_TRNS,KC_TRNS,  KC_TRNS, KC_HOME,
-       KC_TRNS, KC_TRNS,            KC_TRNS,   KC_TRNS, KC_TRNS,  KC_TRNS,
-       KC_TRNS, KC_TRNS,            KC_TRNS,   KC_TRNS, KC_TRNS,  KC_TRNS, KC_END,
-       KC_TRNS, KC_TRNS,            KC_TRNS,        KC_TRNS,      KC_TRNS,
+       KC_TRNS, KC_TRNS,            KC_TRNS,   KC_TRNS,KC_TRNS,  FR_BSLS, KC_HOME,
+       KC_TRNS, FR_TILD,            FR_GRV,    FR_LBRC, FR_RBRC,  KC_TRNS,
+       KC_TRNS, KC_TRNS,            KC_TRNS,   FR_LCBR, FR_RCBR,  FR_PIPE, KC_END,
+       KC_TRNS, KC_TRNS,            KC_TRNS,        FR_AMP,      FR_DLR,
                                            KC_TRNS, KC_TRNS,
                                                     KC_TRNS,
                                   KC_TRNS, KC_TRNS, KC_TRNS,
     // right hand
        KC_TRNS,  KC_F6, KC_F7, KC_F8, KC_F9, KC_PSCREEN, KC_TRNS,
-       KC_TRNS,  KC_TRNS, KC_TRNS, M_7, M_8, M_9, KC_TRNS,
-                 KC_TRNS, KC_TRNS, M_4, M_5, M_6, KC_TRNS,
-       KC_TRNS,  KC_F12, KC_TRNS, M_1, M_2, M_3, KC_TRNS,
-                          KC_TRNS, M_0, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS,  FR_OVRR, FR_CIRC, M_7, M_8, M_9, KC_TRNS,
+                 FR_UMLT, FR_DLR, M_4, M_5, M_6, KC_TRNS,
+       KC_TRNS,  FR_EQL, FR_PLUS, M_1, M_2, M_3, KC_TRNS,
+                          FR_EXLM, M_0, FR_DOT, FR_QUES, KC_TRNS,
        KC_TRNS, KC_TRNS,
        KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS
@@ -240,12 +240,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;    */
-    case COPY:
-      if (record->event.pressed) {
-        key_timer = timer_read(); // if the key is being pressed, we start the timer.
-      } else {
+    case CUT:
+        if (record->event.pressed) {
+          key_timer = timer_read(); // if the key is being pressed, we start the timer.
+        } else {
         if (timer_elapsed(key_timer) < KEY_DELAY) { // when the key is being released, we check the timer
-          send_string("y"); // if the key is released before KEY_DELAY then we send ...
+          send_string("x"); // if the key is released before KEY_DELAY then we send ...
+        }else{ // if the key is released after KEY_DELAY then we send CTRL+c
+          send_string(combo_codes[COMBO_CUT][0]);
+        }
+      }
+      return false;
+      break;        
+      case COPY:
+        if (record->event.pressed) {
+          key_timer = timer_read(); // if the key is being pressed, we start the timer.
+        } else {
+        if (timer_elapsed(key_timer) < KEY_DELAY) { // when the key is being released, we check the timer
+          send_string("c"); // if the key is released before KEY_DELAY then we send ...
         }else{ // if the key is released after KEY_DELAY then we send CTRL+c
           send_string(combo_codes[COMBO_COPY][0]);
         }
@@ -257,7 +269,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         key_timer = timer_read(); // if the key is being pressed, we start the timer.
       } else {
         if (timer_elapsed(key_timer) < KEY_DELAY) { // when the key is being released, we check the timer
-          send_string("x"); // if the key is released before KEY_DELAY then we send ...
+          send_string("v"); // if the key is released before KEY_DELAY then we send ...
         }else{ // if the key is released after KEY_DELAY then we send CTRL+c
           send_string(combo_codes[COMBO_PAST][0]);
         }
@@ -269,7 +281,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         key_timer = timer_read(); // if the key is being pressed, we start the timer.
       } else {
         if (timer_elapsed(key_timer) < KEY_DELAY) { // when the key is being released, we check the timer
-          send_string("k"); // if the key is released before KEY_DELAY then we send ...
+          send_string("s"); // if the key is released before KEY_DELAY then we send ...
         }else{ // if the key is released after KEY_DELAY then we send CTRL+c
           send_string(combo_codes[COMBO_SAVE][0]);
         }
