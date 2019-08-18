@@ -1,4 +1,4 @@
-/** 
+/**
  cd /C/Quentin/Programmes/QMK
  make ergodox_ez:bepo_pilpo_style
  make ergodox_ez:azerty_pilpo_style
@@ -12,8 +12,8 @@
 #include "keymap_extras/keymap_french.h"
 
 #define BASE 0 // default layer
-#define SHIFT 1 
-#define LAYER_2 2 
+#define SHIFT 1
+#define LAYER_2 2
 #define TAPPING_TOGGLE 1
 #define M_1        LSFT(KC_1)
 #define M_2        LSFT(KC_2)
@@ -49,7 +49,7 @@ static uint16_t key_timer;
 enum enum_combo_code {
   COMBO_CUT,
   COMBO_COPY,
-  COMBO_PAST, 
+  COMBO_PAST,
   COMBO_SAVE,
   COMBO_UNDO,
   COMBO_REFRESH_CACHE
@@ -74,10 +74,10 @@ char *combo_codes[][2] = {
     }, {
         SS_LCTRL(SS_TAP(X_F5)),                  // REFRESH_CACHE
         SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
-    }}; 
+    }};
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
- 
+
 [BASE] = LAYOUT_ergodox(  // layer 0 : default
 /* Keymap 0: Basic layer
  * ,--------------------------------------------------.           ,--------------------------------------------------.
@@ -86,44 +86,44 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | TAB    |   A  |  Z   |  E   |  R   |  T   |      |           |  *   |   Y  |   U  |   I  |   O  |   P  | BCKSPC |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |CAPSLOCK|   Q  |  S   |  D   |  F   |  G   |------|           |------|   H  |   J  |   K  |   L  |   M  | ENTER  |
- * |--------+------+------+------+------+------|      |           |  ,   |------+------+------+------+------+--------|
+ * |--------+------+------+------+------+------|  !   |           |  ,   |------+------+------+------+------+--------|
  * | LShift |   W  |   X  |   C  |   V  |  B   |      |           |      |   B  |   N  |   .  |   :  |  ↑   | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |CTRL  | UNDO | Alt  |  <   |   >  |                                       |AltGR | CTRL |   ←  |  ↓  |   →   |
+ *   |CTRL  | < > | Alt  | space | SPACE|                                       |SPACE| AltGR |   ←  |  ↓  |   →   |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        | F8   | F9   |       | WIN  | DEL  |
  *                                 ,------|------|------|       |------+--------+------.
- *                                 | LT(  |      | F10  |       | PgUp |        | LT(  |
- *                                 |SPACE |  F5  |------|       |------|   F2   |SPACE |
- *                                 | ,L2) |      | F11  |       | PgDn |        | ,L2) |
+ *                                 | LT(  |      | F10  |       | PgUp |        |      |
+ *                                 |SPACE |  F5  |------|       |------|   F2   |  F6  |
+ *                                 | ,L2) |      | F11  |       | PgDn |        |      |
  *                                 `--------------------'       `----------------------'
- */  //KC_RCTL             
+ */  //KC_RCTL
 // If it accepts an argument (i.e, is a function), it doesn't need KC_.
 // Otherwise, it needs KC_*
 // KC_COMM/*;.*/
 // left hand
-KC_ESCAPE,             KC_1,                   KC_2,             KC_3,             KC_4,               KC_5,                 FR_UGRV,        
-KC_TAB,                KC_Q,                   KC_W,             KC_E,             KC_R,               KC_T,                 KC_TRNS,        
+KC_ESCAPE,             KC_1,                   KC_2,             KC_3,             KC_4,               KC_5,                 FR_UGRV,
+KC_TAB,                KC_Q,                   KC_W,             KC_E,             KC_R,               KC_T,                 KC_TRNS,
 KC_CAPSLOCK,           KC_A,                   SAVE,             KC_D,             KC_F,               KC_G,
-KC_LSHIFT,             KC_Z,                   CUT,              COPY,             PAST,               KC_B,                 KC_TRNS,        
+KC_LSHIFT,             KC_Z,                   CUT,              COPY,             PAST,               KC_B,                 FR_EXLM,
 //LCTL_T(LCTL(KC_SPC))
-KC_LCTL,  LCTL(KC_W),             KC_LALT,          FR_LESS,          FR_GRTR,
+KC_LCTL,  FR_LESS,             KC_LALT,          KC_SPC,          KC_SPC,
 
                                                                                                                         KC_F8,                      KC_F9,
                                                                                                                                                     KC_F10,
-                                                                                                                        LT(LAYER_2,KC_SPC), REFRESH_CACHE,  KC_F11,
+                                                                                                                        LT(LAYER_2,KC_SPC), KC_F5,  KC_F11,
 
 // right hand
 FR_EQL,          KC_6,                   KC_7,             KC_8,             KC_9,               KC_0,                 TG(LAYER_2),
 FR_ASTR,          KC_Y,                   KC_U,             KC_I,             KC_O,               KC_P,                 KC_BSPACE,
-                  KC_H,                   KC_J,             KC_K,             KC_L,               KC_SCLN,              KC_ENT,                 
+                  KC_H,                   KC_J,             KC_K,             KC_L,               KC_SCLN,              KC_ENT,
 FR_COLN,          KC_B,                   KC_N,             FR_DOT,           KC_DOT/*:/*/,       KC_UP,                KC_RSHIFT,
-                                          KC_RALT,          KC_LCTL,          KC_LEFT,            KC_DOWN,              KC_RIGHT,       
+                                          KC_RALT,          KC_LCTL,          KC_LEFT,            KC_DOWN,              KC_RIGHT,
 
                                                                                                                         KC_RGUI, KC_DEL,
                                                                                                                         KC_PGUP,
-                                                                                                                        KC_PGDN,KC_F2, LT(LAYER_2,KC_SPC)
+                                                                                                                        KC_PGDN,KC_F2, KC_F6
     ),
 /* Keymap 1: Shift Layer
  *
@@ -226,7 +226,7 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
             layer_off(SHIFT);
             unregister_code(KC_LSFT);
         }
-        break;       
+        break;
   }
   return MACRO_NONE;
 }
@@ -257,7 +257,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       }
       return false;
-      break;        
+      break;
       case COPY:
         if (record->event.pressed) {
           key_timer = timer_read(); // if the key is being pressed, we start the timer.
@@ -269,7 +269,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       }
       return false;
-      break;    
+      break;
     case PAST:
       if (record->event.pressed) {
         key_timer = timer_read(); // if the key is being pressed, we start the timer.
@@ -281,7 +281,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       }
       return false;
-      break;    
+      break;
     case SAVE:
       if (record->event.pressed) {
         key_timer = timer_read(); // if the key is being pressed, we start the timer.
@@ -293,7 +293,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       }
       return false;
-      break;    
+      break;
     case REFRESH_CACHE:
       if (record->event.pressed) {
         key_timer = timer_read(); // if the key is being pressed, we start the timer.
