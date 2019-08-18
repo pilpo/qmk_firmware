@@ -10,6 +10,7 @@
 #include "version.h"
 #include "action_tapping.h"
 #include "keymap_extras/keymap_french.h"
+//#include "keymap_extras/keymap_bepo.h"
 
 #define BASE 0 // default layer
 #define SHIFT 1
@@ -36,7 +37,8 @@ enum custom_keycodes {
   SAVE,
   UNDO,
   COMMENT_BLOCK_OR_RENAME,
-  REFRESH_CACHE
+  REFRESH_CACHE,
+  CUSTOM_TILD
   // LAST "MACRO"
 };
 
@@ -54,7 +56,8 @@ enum enum_combo_code {
   COMBO_SAVE,
   COMBO_UNDO,
   COMBO_COMMENT_BLOCK_OR_RENAME,
-  COMBO_REFRESH_CACHE
+  COMBO_REFRESH_CACHE,
+  COMBO_TILD
 };
 
 char *combo_codes[][2] = {
@@ -79,6 +82,9 @@ char *combo_codes[][2] = {
     }, {
         SS_LCTRL(SS_TAP(X_F5)),                  // REFRESH_CACHE
         SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
+    }, {
+        SS_LALT(SS_TAP(X_KP_1)SS_TAP(X_KP_2)SS_TAP(X_KP_6)),                // ALT+126 ~
+        SS_LALT(SS_LSFT(SS_TAP(X_LBRACKET)))                                // mac shortcut for later
     }
 };
 
@@ -89,13 +95,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * | Esc    |   &  |   é  |   "  |   '  |   (  |  ù   |           |  =   |   -  |   è  |   _  |   ç  |   à  |  TL2   |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | TAB    |   A  |  Z   |  E   |  R   |  T   |      |           |  *   |   Y  |   U  |   I  |   O  |   P  | BCKSPC |
+ * | TAB    |   A  |  Z   |  E   |  R   |  T   |  )   |           |  *   |   Y  |   U  |   I  |   O  |   P  | BCKSPC |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |CAPSLOCK|   Q  |  S   |  D   |  F   |  G   |------|           |------|   H  |   J  |   K  |   L  |   M  | ENTER  |
  * |--------+------+------+------+------+------|  !   |           |  ,   |------+------+------+------+------+--------|
  * | LShift |   W  |   X  |   C  |   V  |  B   |      |           |      |   B  |   N  |   .  |   :  |  ↑   | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |CTRL  | < > | Alt  | space | SPACE|                                       |SPACE| AltGR |   ←  |  ↓  |   →   |
+ *   |CTRL  | LT(< >,2) | Alt  | SPACE | SPACE|                                       |SPACE| AltGR |   ←  |  ↓  |   →   |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        | F8   | F9   |       | WIN  | DEL  |
@@ -110,21 +116,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // KC_COMM/*;.*/
 // left hand
 KC_ESCAPE,             KC_1,                   KC_2,             KC_3,             KC_4,               KC_5,                 FR_UGRV,
-KC_TAB,                KC_Q,                   KC_W,             KC_E,             KC_R,               KC_T,                 KC_TRNS,
+KC_TAB,                KC_Q,                   KC_W,             KC_E,             KC_R,               KC_T,                 FR_RPRN,
 KC_CAPSLOCK,           KC_A,                   SAVE,             KC_D,             KC_F,               KC_G,
 KC_LSHIFT,             KC_Z,                   CUT,              COPY,             PAST,               KC_B,                 FR_EXLM,
 //LCTL_T(LCTL(KC_SPC))
-KC_LCTL,  FR_LESS,             KC_LALT,          KC_SPC,          KC_SPC,
+KC_LCTL,  LT(LAYER_2,FR_LESS),             KC_LALT,          KC_SPC,          KC_SPC,
 
                                                                                                                         KC_F8,                      KC_F9,
                                                                                                                                                     KC_F10,
-                                                                                                                        LT(LAYER_2,KC_SPC), KC_F5,  KC_F11,
+                                                                                                                        MO(LAYER_2), KC_F5,  KC_F11,
 
 // right hand
 FR_EQL,          KC_6,                   KC_7,             KC_8,             KC_9,               KC_0,                 TG(LAYER_2),
 FR_ASTR,          KC_Y,                   KC_U,             KC_I,             KC_O,               KC_P,                 KC_BSPACE,
                   KC_H,                   KC_J,             KC_K,             KC_L,               KC_SCLN,              KC_ENT,
-FR_COLN,          KC_B,                   KC_N,             FR_DOT,           KC_DOT/*:/*/,       KC_UP,                KC_RSHIFT,
+FR_COMM,          KC_B,                   KC_N,             FR_DOT,           KC_DOT/*:/*/,       KC_UP,                KC_RSHIFT,
                                           KC_SPC,          KC_RALT,          KC_LEFT,            KC_DOWN,              KC_RIGHT,
 
                                                                                                                         KC_RGUI, KC_DEL,
@@ -184,7 +190,7 @@ FR_COLN,          KC_B,                   KC_N,             FR_DOT,           KC
  * |---------+------+------+------+------+------|  END |           |      |------+------+------+------+------+--------|
  * |         |      |      |  {   |  }   |  |   |      |           |      |  =   |   +  |  1   |  2   | 3    |        |
  * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |       |      |      |  &   |  $   |                                       |   ?  |  0   |  .   | !    |      |
+ *   |       |      |      |  &   |  $   |                                       |   !  |  0   |  .   |      |      |
  *   `-----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        |      |      |       |      |       |
@@ -198,7 +204,7 @@ FR_COLN,          KC_B,                   KC_N,             FR_DOT,           KC
 [LAYER_2] = LAYOUT_ergodox(
        KC_TRNS, KC_F1,              KC_F2,     KC_F3,  KC_F4,    KC_F5,   KC_TRNS,
        KC_TRNS, KC_TRNS,            KC_TRNS,   KC_TRNS,KC_TRNS,  FR_BSLS, KC_HOME,
-       KC_TRNS, FR_TILD,            FR_GRV,    FR_LBRC, FR_RBRC,  KC_TRNS,
+       KC_TRNS, CUSTOM_TILD,            FR_GRV,    FR_LBRC, FR_RBRC,  KC_TRNS,
        KC_TRNS, KC_TRNS,            KC_TRNS,   FR_LCBR, FR_RCBR,  FR_PIPE, KC_END,
        KC_TRNS, KC_TRNS,            KC_TRNS,        FR_AMP,      FR_DLR,
                                            KC_TRNS, KC_TRNS,
@@ -209,7 +215,7 @@ FR_COLN,          KC_B,                   KC_N,             FR_DOT,           KC
        KC_TRNS,  FR_OVRR, FR_CIRC, M_7, M_8, M_9, KC_TRNS,
                  FR_UMLT, FR_DLR, M_4, M_5, M_6, KC_TRNS,
        KC_TRNS,  FR_EQL, FR_PLUS, M_1, M_2, M_3, KC_TRNS,
-                          FR_EXLM, M_0, FR_DOT, FR_QUES, KC_TRNS,
+                          FR_EXLM, M_0, FR_DOT, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS,
        KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS
@@ -320,6 +326,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           register_code(KC_F5); // if the key is released before KEY_DELAY then we send ...
         }else{ // if the key is released after KEY_DELAY then we send CTRL+c
           send_string(combo_codes[COMBO_REFRESH_CACHE][0]);
+        }
+      }
+      return false;
+      break;
+    case CUSTOM_TILD:
+      if (record->event.pressed) {
+        key_timer = timer_read(); // if the key is being pressed, we start the timer.
+      } else {
+        if (timer_elapsed(key_timer) < KEY_DELAY) { // when the key is being released, we check the timer
+          send_string(combo_codes[COMBO_TILD][0]);
+        }else{ // if the key is released after KEY_DELAY then we send CTRL+c
+//          send_string(combo_codes[COMBO_REFRESH_CACHE][0]);
         }
       }
       return false;
