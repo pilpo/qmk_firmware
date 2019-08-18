@@ -110,7 +110,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                 |SPACE |  F5  |------|       |------|   F2   |  COMBO_COMMENT_BLOCK_OR_RENAME |
  *                                 | ,L2) |      | F11  |       | PgDn |        |      |
  *                                 `--------------------'       `----------------------'
- */  //KC_RCTL
+ */
+//KC_RCTL
 // If it accepts an argument (i.e, is a function), it doesn't need KC_.
 // Otherwise, it needs KC_*
 // KC_COMM/*;.*/
