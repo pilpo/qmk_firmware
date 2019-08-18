@@ -70,3 +70,4 @@ id_rsa_*
 /.vs
 /qmk_toolbox.exe
 /msys64/
+/teensy.exe

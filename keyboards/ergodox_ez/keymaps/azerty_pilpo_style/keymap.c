@@ -35,6 +35,7 @@ enum custom_keycodes {
   PAST,
   SAVE,
   UNDO,
+  COMMENT_BLOCK_OR_RENAME,
   REFRESH_CACHE
   // LAST "MACRO"
 };
@@ -52,6 +53,7 @@ enum enum_combo_code {
   COMBO_PAST,
   COMBO_SAVE,
   COMBO_UNDO,
+  COMBO_COMMENT_BLOCK_OR_RENAME,
   COMBO_REFRESH_CACHE
 };
 
@@ -72,9 +74,13 @@ char *combo_codes[][2] = {
         SS_LCTRL(SS_TAP(X_W)),                  // UNDO
         SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
     }, {
+         SS_LCTRL(SS_LSFT(SS_TAP(X_DOT))),      // COMBO_COMMENT_BLOCK_OR_RENAME
+         SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
+    }, {
         SS_LCTRL(SS_TAP(X_F5)),                  // REFRESH_CACHE
         SS_LALT(SS_LSFT(SS_TAP(X_RBRACKET)))    // mac shortcut for later
-    }};
+    }
+};
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -95,7 +101,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                        | F8   | F9   |       | WIN  | DEL  |
  *                                 ,------|------|------|       |------+--------+------.
  *                                 | LT(  |      | F10  |       | PgUp |        |      |
- *                                 |SPACE |  F5  |------|       |------|   F2   |  F6  |
+ *                                 |SPACE |  F5  |------|       |------|   F2   |  COMBO_COMMENT_BLOCK_OR_RENAME |
  *                                 | ,L2) |      | F11  |       | PgDn |        |      |
  *                                 `--------------------'       `----------------------'
  */  //KC_RCTL
@@ -119,11 +125,11 @@ FR_EQL,          KC_6,                   KC_7,             KC_8,             KC_
 FR_ASTR,          KC_Y,                   KC_U,             KC_I,             KC_O,               KC_P,                 KC_BSPACE,
                   KC_H,                   KC_J,             KC_K,             KC_L,               KC_SCLN,              KC_ENT,
 FR_COLN,          KC_B,                   KC_N,             FR_DOT,           KC_DOT/*:/*/,       KC_UP,                KC_RSHIFT,
-                                          KC_RALT,          KC_LCTL,          KC_LEFT,            KC_DOWN,              KC_RIGHT,
+                                          KC_SPC,          KC_RALT,          KC_LEFT,            KC_DOWN,              KC_RIGHT,
 
                                                                                                                         KC_RGUI, KC_DEL,
                                                                                                                         KC_PGUP,
-                                                                                                                        KC_PGDN,KC_F2, KC_F6
+                                                                                                                        KC_PGDN,KC_F2, COMMENT_BLOCK_OR_RENAME
     ),
 /* Keymap 1: Shift Layer
  *
@@ -294,6 +300,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
+    case COMMENT_BLOCK_OR_RENAME:
+        if (record->event.pressed) {
+            key_timer = timer_read(); // if the key is being pressed, we start the timer.
+        } else {
+            if (timer_elapsed(key_timer) < KEY_DELAY) { // when the key is being released, we check the timer
+                register_code(KC_F6); // if the key is released before KEY_DELAY then we send ...
+            }else{ // if the key is released after KEY_DELAY then we send CTRL+c
+             send_string(combo_codes[COMBO_COMMENT_BLOCK_OR_RENAME][0]);
+            }
+        }
+    return false;
+    break;
     case REFRESH_CACHE:
       if (record->event.pressed) {
         key_timer = timer_read(); // if the key is being pressed, we start the timer.
