@@ -1,3 +1,9 @@
+/** 
+ cd /C/Quentin/Programmes/QMK
+ make ergodox_ez:bepo_pilpo_style
+ make ergodox_ez:azerty_pilpo_style
+*/
+
 #include QMK_KEYBOARD_H
 //#include "debug.h"
 #include "action_layer.h"
